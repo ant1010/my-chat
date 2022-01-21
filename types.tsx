@@ -47,7 +47,7 @@ export type MainTabParamList = {
 };
 
 export type ChatsParamList = {
-  ChatsScreen: undefined;
+  ChatsScreen: String;
 };
 
 export type ContactsParamList = {
@@ -62,11 +62,12 @@ export type Message = {
   id:String;
   content:String;
   createdAt:string;
+  user: User;
 
 }
 export type ChatRoom = {
   id: String;
-  users: [User];
+  users: User[];
   lastMessage: Message;
   
 }
