@@ -18,7 +18,6 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import ChatsScreen from '../screens/ChatsScreen';
 import ChatRoomScreen from '../screens/ChatRoomScreen'
 import ContactsScreen from '../screens/ContactsScreen';
-import CallsScreen from '../screens/CallsScreen';
 import { RootStackParamList, MainTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
@@ -65,10 +64,7 @@ function RootNavigator() {
         )
         
         }} />
-        <Stack.Screen
-        name ="Calls"
-        component={CallsScreen}
-      />
+      
       <Stack.Screen name="ChatRoom" component={ChatRoomScreen} options={({route}) =>  ({
         title:route.params.name,
         headerRight: () =>(
@@ -138,12 +134,12 @@ function MainTabNavigator() {
       />
       <MainTab.Screen
         name="Calls"
-        component={CallsScreen} options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
+        component={ChatsScreen} options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
         
       />
       <MainTab.Screen
         name="Status"
-        component={CallsScreen}options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
+        component={ChatsScreen}options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
         
       />
     </MainTab.Navigator>

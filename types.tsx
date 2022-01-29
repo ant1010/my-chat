@@ -44,7 +44,7 @@ export type MainTabParamList = {
   Chats: undefined;
   Status: undefined;
   Calls: undefined;
-  Camera:undefined;
+  
 };
 
 export type ChatsParamList = {
