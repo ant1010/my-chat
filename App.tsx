@@ -17,11 +17,13 @@ Amplify.configure({
   }
 });
 const randomImages = [
-  'https://images.app.goo.gl/9XW5Vqe6a2UTBmLg7',
-  'https://images.app.goo.gl/fZMvdufbNTueAst59',
-  'https://images.app.goo.gl/uQovGEKqND2iNmfb8',
-  'https://images.app.goo.gl/gme97Fx4L1WVPDm57',
-  'https://images.app.goo.gl/HjRduEZGRqmgEFxp6'
+  'https://img.favpng.com/25/7/23/computer-icons-user-profile-avatar-image-png-favpng-LFqDyLRhe3PBXM0sx2LufsGFU.jpg',
+  'https://e7.pngegg.com/pngimages/550/997/png-clipart-user-icon-foreigners-avatar-child-face.png',
+  'https://www.clipartmax.com/png/middle/100-1005846_waiter-free-icon-avatar-profile-circle-png.png',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9z7LTJsUq3rmFG9YrxvzZCKe09bkJLT2LO7mhVadfMJnHbPcvfIr8Oj24GNnmjnSRboc&usqp=CAU',
+  'https://www.clipartmax.com/png/middle/144-1442871_avatar-female-person-user-woman-young-icon-avatar-sport.png'
+
+  
 ]
  function App() {
   const isLoadingComplete = useCachedResources();
