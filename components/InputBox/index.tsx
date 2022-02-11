@@ -20,8 +20,10 @@ const InputBox = (props) => {
     useEffect(() => {
       const fetchUser = async () => {
         const userInfo = await Auth.currentAuthenticatedUser();
+
         setMyUserId(userInfo.attributes.sub);
       }
+      fetchUser();
     },[])
   const onMicrophonePress = () => {
     console.warn('Microphone')
@@ -32,6 +34,7 @@ const InputBox = (props) => {
 
     // send the message to the backend
     try{
+      console.log(myUserId);
       await API.graphql(graphqlOperation(createMessage,{input:{content:message,userID:myUserId,chatRoomID}}))
     }catch(e){
       console.log(e);
