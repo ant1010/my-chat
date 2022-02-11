@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {View, Text, TextInput, TouchableOpacity,} from "react-native";
 import styles from './styles';
-
+import{API,Auth,graphqlOperation,} from "aws-amplify";
+import {createMessage} from "../../src/graphql/mutations";
 import {
   MaterialCommunityIcons,
   MaterialIcons,
@@ -10,18 +11,31 @@ import {
   Fontisto,
 } from '@expo/vector-icons';
 
-const InputBox = () => {
+const InputBox = (props) => {
 
+  const {chatRoomID} = props;
   const [message, setMessage] = useState('');
+  const [myUserId, setMyUserId] = useState('');
 
+    useEffect(() => {
+      const fetchUser = async () => {
+        const userInfo = await Auth.currentAuthenticatedUser();
+        setMyUserId(userInfo.attributes.sub);
+      }
+    },[])
   const onMicrophonePress = () => {
     console.warn('Microphone')
   }
 
-  const onSendPress = () => {
+  const onSendPress = async () => {
     console.warn(`Sending: ${message}`)
 
     // send the message to the backend
+    try{
+      await API.graphql(graphqlOperation(createMessage,{input:{content:message,userID:myUserId,chatRoomID}}))
+    }catch(e){
+      console.log(e);
+    }
 
     setMessage('');
   }
