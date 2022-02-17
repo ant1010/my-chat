@@ -9,6 +9,7 @@ import {useEffect,useState} from 'react';
 import {API,Auth,graphqlOperation} from 'aws-amplify';
 import InputBox from "../components/InputBox";
 import {messagesByChatRoom} from '../src/graphql/queries';
+import {onCreateMessage} from '../src/graphql/subscriptions';
 const ChatRoomScreen = () => {
   const [messages,setMessages] = useState([]);
   const [myId, setMyId] = useState(null);
@@ -28,13 +29,30 @@ const ChatRoomScreen = () => {
    
   },[])
 
-  useEffect(() => {
+    useEffect(() => {
     const getMyId = async () => {
       const userInfo = await Auth.currentAuthenticatedUser();
       setMyId(userInfo.attributes.sub);
     }
     getMyId();
-  }, [])
+  }, [])  
+
+    useEffect(() =>{
+      const subscription = API.graphql(
+        graphqlOperation(onCreateMessage)).subscribe({next:(data) => {
+          const newMessage = data.value.data.onCreateMessage;
+          console.log(data.value.data);
+          if(newMessage.chatRoomID !== route.params.id){
+            return;
+          }
+
+           console.log(data)
+          // setMessages([newMessage, ...messages]);
+          fetchMessages();
+        }})
+      
+      return () => subscription.unsubscribe();
+    },[])
   return (
     <View style={{width: '100%', height: '100%'}} >
     

@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 import {View, Text, TextInput, TouchableOpacity,} from "react-native";
 import styles from './styles';
 import{API,Auth,graphqlOperation,} from "aws-amplify";
-import {createMessage} from "../../src/graphql/mutations";
+import {createMessage,updateChatRoom} from "../../src/graphql/mutations";
 import {
   MaterialCommunityIcons,
   MaterialIcons,
@@ -29,13 +29,13 @@ const InputBox = (props) => {
     console.warn('Microphone')
   }
 
+
   const onSendPress = async () => {
     console.warn(`Sending: ${message}`)
-
     // send the message to the backend
     try{
-      console.log(myUserId);
-      await API.graphql(graphqlOperation(createMessage,{input:{content:message,userID:myUserId,chatRoomID}}))
+     const newMessageData =  await API.graphql(graphqlOperation(createMessage,{input:{content:message,userID:myUserId,chatRoomID}}))
+     await updateChatRoomLasMessge(newMessageData.data.createMessage.id);
     }catch(e){
       console.log(e);
     }
@@ -43,6 +43,14 @@ const InputBox = (props) => {
     setMessage('');
   }
 
+  const updateChatRoomLasMessge = async (messageId:string) => {
+    try{
+      await  API.graphql(graphqlOperation(updateChatRoom,{input:{id:chatRoomID,lastMessageID:messageId}}))
+    }catch(e){
+      console.log(e);
+    }
+
+  }
   const onPress = () => {
     if (!message) {
       onMicrophonePress();
