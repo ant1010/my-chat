@@ -6,6 +6,8 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import {getUser} from './src/graphql/queries';
 import {createUser} from './src/graphql/mutations';
+import {onCreateMessage} from './src/graphql/subscriptions';
+
 // @ts-ignore
 import { withAuthenticator } from 'aws-amplify-react-native';
 import Amplify, { Auth ,API,graphqlOperation} from 'aws-amplify'
@@ -46,11 +48,11 @@ useEffect(() => {
     console.log(userData);
     if(userData.data.getUser){
       console.log("USer already exxxiiissts");
-      //return;
+      return;
     }
     const newUser = {
-      id:"5a9264d0-0ef2-4a24-89f1-2f68cb87b572", //userInfo.attributes.sub,
-      name:"Dave",//userInfo.username,
+      id:userInfo.attributes.sub,
+      name: userInfo.username,
       imageUri: getRandomImage(),
       status:"hey, iam on whatsapp"
     }
@@ -61,7 +63,22 @@ useEffect(() => {
   fetchUser();
 },[])
 
+useEffect(() =>{
+  const subscription = API.graphql(
+    graphqlOperation(onCreateMessage)).subscribe({next:(data) => {
+      const newMessage = data.value.data.onCreateMessage;
+      console.log(newMessage);
+      
 
+       console.log(data)
+      // setMessages([newMessage, ...messages]);
+
+     
+      
+    }})
+  
+  return () => subscription.unsubscribe();
+},[])
 
 
   if (!isLoadingComplete) {

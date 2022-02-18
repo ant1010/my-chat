@@ -36,7 +36,8 @@ const InputBox = (props) => {
     // send the message to the backend
     try{
      const newMessageData =  await API.graphql(graphqlOperation(createMessage,{input:{content:message,userID:myUserId,chatRoomID}}))
-     await updateChatRoomLasMessge(newMessageData.data.createMessage.id);
+     console.log(newMessageData);
+     
     }catch(e){
       console.log(e);
     }
@@ -44,14 +45,7 @@ const InputBox = (props) => {
     setMessage('');
   }
 
-  const updateChatRoomLasMessge = async (messageId:string) => {
-    try{
-      await  API.graphql(graphqlOperation(updateChatRoom,{input:{id:chatRoomID,lastMessageID:messageId}}))
-    }catch(e){
-      console.log(e);
-    }
-
-  }
+  
   const onPress = () => {
     if (!message) {
       onMicrophonePress();

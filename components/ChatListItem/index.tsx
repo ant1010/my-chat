@@ -9,16 +9,28 @@ import { ChatRoom } from "../../types";
 import styles from "./style";
 import moment from "moment";
 import { useNavigation } from '@react-navigation/native';
-import {Auth} from 'aws-amplify';
+import {
+  API,
+  graphqlOperation,
+  Auth,
+
+}from 'aws-amplify';
 import {useEffect,useState} from 'react';
+import {onCreateMessage} from '../../src/graphql/subscriptions';
+import { Entypo } from '@expo/vector-icons';
+import {updateChatRoom} from "../../src/graphql/mutations";
+
 export type ChatListItemProps = {
   chatRoom: ChatRoom;
+  
 }
 
 const ChatListItem = (props: ChatListItemProps) => {
   const { chatRoom } = props;
+  
   const [otherUser,setOtherUser] = useState(null);
-
+  const[newMessage,setNewMessage] = useState(false);
+  
   const navigation = useNavigation();
   
   const user = chatRoom.chatRoomUsers.items[1].user;
@@ -39,8 +51,10 @@ const ChatListItem = (props: ChatListItemProps) => {
 
   
 
+ 
+
   const onClick = () => {
-    navigation.navigate('ChatRoom', {
+    navigation.navigate("ChatRoom", {
       id: chatRoom.id,
       name: user.name,
     })
@@ -53,11 +67,12 @@ const ChatListItem = (props: ChatListItemProps) => {
     <TouchableWithoutFeedback onPress={onClick}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
+       
           <Image source={{ uri: otherUser.imageUri }} style={styles.avatar}/>
 
-          <View style={styles.midContainer}>
+          <View style={styles.midContainer} >
             <Text style={styles.username}>{otherUser.name}</Text>
-            <Text numberOfLines={2} style={styles.lastMessage}>{chatRoom.lastMessage ? `${chatRoom.lastMessage.user.name}: ${chatRoom.lastMessage.content}` : " "}</Text>
+            <Text numberOfLines={2} style={styles.lastMessage}>{chatRoom.lastMessage ? `${chatRoom.lastMessage.user.name}: ${chatRoom.lastMessage.content}` : "none"}</Text>
           </View>
 
         </View>

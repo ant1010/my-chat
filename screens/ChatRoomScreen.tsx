@@ -9,6 +9,7 @@ import {useEffect,useState} from 'react';
 import {API,Auth,graphqlOperation} from 'aws-amplify';
 import InputBox from "../components/InputBox";
 import {messagesByChatRoom} from '../src/graphql/queries';
+import {updateChatRoom} from '../src/graphql/mutations';
 import {onCreateMessage} from '../src/graphql/subscriptions';
 const ChatRoomScreen = () => {
   const [messages,setMessages] = useState([]);
@@ -21,12 +22,23 @@ const ChatRoomScreen = () => {
       const messageData = await API.graphql(graphqlOperation(messagesByChatRoom,{chatRoomID:route.params.id,sortDirection:"DESC"}))
       console.log(route);
       console.log(messageData.data.messagesByChatRoom.items);
+      //updateChatRoomLastMessage(messageData.data.messagesByChatRoom.items[0].id);
       setMessages(messageData.data.messagesByChatRoom.items);
-      console.log(messages);
+      
+      
+      
+    }
+    const updateChatRoomLastMessage = async (messageId:string) => {
+      try{
+        await  API.graphql(graphqlOperation(updateChatRoom,{input:{id:route.params.id,lastMessageID:messageId}}))
+      }catch(e){
+        console.log(e);
+      }
+  
     }
     useEffect(() => {
                     // note mutable flag
-  fetchMessages()
+      fetchMessages()
    
   },[])
 
@@ -42,19 +54,24 @@ const ChatRoomScreen = () => {
       const subscription = API.graphql(
         graphqlOperation(onCreateMessage)).subscribe({next:(data) => {
           const newMessage = data.value.data.onCreateMessage;
-          console.log(data.value.data);
+          
           if(newMessage.chatRoomID !== route.params.id){
             return;
           }
 
-           console.log(data)
+           console.log("message recieved");
           // setMessages([newMessage, ...messages]);
+         
+          updateChatRoomLastMessage(newMessage.id);
+         
           fetchMessages();
+          
         }})
       
       return () => subscription.unsubscribe();
     },[])
-  return (
+  
+    return (
     <View style={{width: '100%', height: '100%'}} >
     
       <FlatList
