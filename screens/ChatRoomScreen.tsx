@@ -19,6 +19,7 @@ const ChatRoomScreen = () => {
   
     const fetchMessages = async () => {
       const messageData = await API.graphql(graphqlOperation(messagesByChatRoom,{chatRoomID:route.params.id,sortDirection:"DESC"}))
+      console.log(route);
       console.log(messageData.data.messagesByChatRoom.items);
       setMessages(messageData.data.messagesByChatRoom.items);
       console.log(messages);

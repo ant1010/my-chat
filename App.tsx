@@ -46,14 +46,15 @@ useEffect(() => {
     console.log(userData);
     if(userData.data.getUser){
       console.log("USer already exxxiiissts");
-      return;
+      //return;
     }
     const newUser = {
-      id: userInfo.attributes.sub,
-      name:userInfo.username,
+      id:"5a9264d0-0ef2-4a24-89f1-2f68cb87b572", //userInfo.attributes.sub,
+      name:"Dave",//userInfo.username,
       imageUri: getRandomImage(),
-      status:"hey, iam a boss on whatsapp"
+      status:"hey, iam on whatsapp"
     }
+    console.log("new User")
     await API.graphql(graphqlOperation(createUser,{input:newUser}));
    }
   }

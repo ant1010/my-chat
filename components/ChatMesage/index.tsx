@@ -13,7 +13,6 @@ const ChatMessage = (props: ChatMessageProps) => {
   const { message,myId } = props;
 
   const isMyMessage = () => {
-    console.log(message);
     return message.user.id === myId;
   }
 
