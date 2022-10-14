@@ -65,6 +65,7 @@ export type User = {
   imageUri?: string | null,
   status?: string | null,
   chatRoomUser?: ModelChatRoomUserConnection | null,
+  eventUser?: ModelEventUserConnection | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -112,6 +113,48 @@ export type Message = {
   chatRoomID: string,
   user?: User | null,
   chatRoom?: ChatRoom | null,
+  updatedAt: string,
+};
+
+export type ModelEventUserConnection = {
+  __typename: "ModelEventUserConnection",
+  items:  Array<EventUser | null >,
+  nextToken?: string | null,
+};
+
+export type EventUser = {
+  __typename: "EventUser",
+  id: string,
+  userID: string,
+  eventRoomID: string,
+  user?: User | null,
+  eventRoom?: EventRoom | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type EventRoom = {
+  __typename: "EventRoom",
+  id: string,
+  eventUsers?: ModelEventUserConnection | null,
+  eventID?: string | null,
+  event?: Event | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type Event = {
+  __typename: "Event",
+  id: string,
+  userID: string,
+  title: string,
+  createdAt: string,
+  content?: string | null,
+  eventTime: string,
+  eventLocation: string,
+  user?: User | null,
+  eventRoomID: string,
+  eventRoom?: EventRoom | null,
   updatedAt: string,
 };
 
@@ -217,6 +260,90 @@ export type DeleteMessageInput = {
   id: string,
 };
 
+export type CreateEventUserInput = {
+  id?: string | null,
+  userID: string,
+  eventRoomID: string,
+};
+
+export type ModelEventUserConditionInput = {
+  userID?: ModelIDInput | null,
+  eventRoomID?: ModelIDInput | null,
+  and?: Array< ModelEventUserConditionInput | null > | null,
+  or?: Array< ModelEventUserConditionInput | null > | null,
+  not?: ModelEventUserConditionInput | null,
+};
+
+export type UpdateEventUserInput = {
+  id: string,
+  userID?: string | null,
+  eventRoomID?: string | null,
+};
+
+export type DeleteEventUserInput = {
+  id: string,
+};
+
+export type CreateEventRoomInput = {
+  id?: string | null,
+  eventID?: string | null,
+};
+
+export type ModelEventRoomConditionInput = {
+  eventID?: ModelIDInput | null,
+  and?: Array< ModelEventRoomConditionInput | null > | null,
+  or?: Array< ModelEventRoomConditionInput | null > | null,
+  not?: ModelEventRoomConditionInput | null,
+};
+
+export type UpdateEventRoomInput = {
+  id: string,
+  eventID?: string | null,
+};
+
+export type DeleteEventRoomInput = {
+  id: string,
+};
+
+export type CreateEventInput = {
+  id?: string | null,
+  userID: string,
+  title: string,
+  createdAt?: string | null,
+  content?: string | null,
+  eventTime: string,
+  eventLocation: string,
+  eventRoomID: string,
+};
+
+export type ModelEventConditionInput = {
+  userID?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  eventTime?: ModelStringInput | null,
+  eventLocation?: ModelStringInput | null,
+  eventRoomID?: ModelIDInput | null,
+  and?: Array< ModelEventConditionInput | null > | null,
+  or?: Array< ModelEventConditionInput | null > | null,
+  not?: ModelEventConditionInput | null,
+};
+
+export type UpdateEventInput = {
+  id: string,
+  userID?: string | null,
+  title?: string | null,
+  createdAt?: string | null,
+  content?: string | null,
+  eventTime?: string | null,
+  eventLocation?: string | null,
+  eventRoomID?: string | null,
+};
+
+export type DeleteEventInput = {
+  id: string,
+};
+
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -267,6 +394,49 @@ export type ModelMessageFilterInput = {
   not?: ModelMessageFilterInput | null,
 };
 
+export type ModelEventUserFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  eventRoomID?: ModelIDInput | null,
+  and?: Array< ModelEventUserFilterInput | null > | null,
+  or?: Array< ModelEventUserFilterInput | null > | null,
+  not?: ModelEventUserFilterInput | null,
+};
+
+export type ModelEventRoomFilterInput = {
+  id?: ModelIDInput | null,
+  eventID?: ModelIDInput | null,
+  and?: Array< ModelEventRoomFilterInput | null > | null,
+  or?: Array< ModelEventRoomFilterInput | null > | null,
+  not?: ModelEventRoomFilterInput | null,
+};
+
+export type ModelEventRoomConnection = {
+  __typename: "ModelEventRoomConnection",
+  items:  Array<EventRoom | null >,
+  nextToken?: string | null,
+};
+
+export type ModelEventFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  eventTime?: ModelStringInput | null,
+  eventLocation?: ModelStringInput | null,
+  eventRoomID?: ModelIDInput | null,
+  and?: Array< ModelEventFilterInput | null > | null,
+  or?: Array< ModelEventFilterInput | null > | null,
+  not?: ModelEventFilterInput | null,
+};
+
+export type ModelEventConnection = {
+  __typename: "ModelEventConnection",
+  items:  Array<Event | null >,
+  nextToken?: string | null,
+};
+
 export type ModelStringKeyConditionInput = {
   eq?: string | null,
   le?: string | null,
@@ -307,6 +477,18 @@ export type CreateUserMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    eventUser?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -331,6 +513,18 @@ export type UpdateUserMutation = {
         id: string,
         userID: string,
         chatRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventUser?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -365,6 +559,18 @@ export type DeleteUserMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    eventUser?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -389,6 +595,10 @@ export type CreateChatRoomUserMutation = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -444,6 +654,10 @@ export type UpdateChatRoomUserMutation = {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
       } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -495,6 +709,10 @@ export type DeleteChatRoomUserMutation = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -747,6 +965,10 @@ export type CreateMessageMutation = {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
       } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -799,6 +1021,10 @@ export type UpdateMessageMutation = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -855,6 +1081,10 @@ export type DeleteMessageMutation = {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
       } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -877,6 +1107,519 @@ export type DeleteMessageMutation = {
         content: string,
         userID: string,
         chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateEventUserMutationVariables = {
+  input: CreateEventUserInput,
+  condition?: ModelEventUserConditionInput | null,
+};
+
+export type CreateEventUserMutation = {
+  createEventUser?:  {
+    __typename: "EventUser",
+    id: string,
+    userID: string,
+    eventRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateEventUserMutationVariables = {
+  input: UpdateEventUserInput,
+  condition?: ModelEventUserConditionInput | null,
+};
+
+export type UpdateEventUserMutation = {
+  updateEventUser?:  {
+    __typename: "EventUser",
+    id: string,
+    userID: string,
+    eventRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteEventUserMutationVariables = {
+  input: DeleteEventUserInput,
+  condition?: ModelEventUserConditionInput | null,
+};
+
+export type DeleteEventUserMutation = {
+  deleteEventUser?:  {
+    __typename: "EventUser",
+    id: string,
+    userID: string,
+    eventRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateEventRoomMutationVariables = {
+  input: CreateEventRoomInput,
+  condition?: ModelEventRoomConditionInput | null,
+};
+
+export type CreateEventRoomMutation = {
+  createEventRoom?:  {
+    __typename: "EventRoom",
+    id: string,
+    eventUsers?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventID?: string | null,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateEventRoomMutationVariables = {
+  input: UpdateEventRoomInput,
+  condition?: ModelEventRoomConditionInput | null,
+};
+
+export type UpdateEventRoomMutation = {
+  updateEventRoom?:  {
+    __typename: "EventRoom",
+    id: string,
+    eventUsers?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventID?: string | null,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteEventRoomMutationVariables = {
+  input: DeleteEventRoomInput,
+  condition?: ModelEventRoomConditionInput | null,
+};
+
+export type DeleteEventRoomMutation = {
+  deleteEventRoom?:  {
+    __typename: "EventRoom",
+    id: string,
+    eventUsers?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventID?: string | null,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateEventMutationVariables = {
+  input: CreateEventInput,
+  condition?: ModelEventConditionInput | null,
+};
+
+export type CreateEventMutation = {
+  createEvent?:  {
+    __typename: "Event",
+    id: string,
+    userID: string,
+    title: string,
+    createdAt: string,
+    content?: string | null,
+    eventTime: string,
+    eventLocation: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoomID: string,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateEventMutationVariables = {
+  input: UpdateEventInput,
+  condition?: ModelEventConditionInput | null,
+};
+
+export type UpdateEventMutation = {
+  updateEvent?:  {
+    __typename: "Event",
+    id: string,
+    userID: string,
+    title: string,
+    createdAt: string,
+    content?: string | null,
+    eventTime: string,
+    eventLocation: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoomID: string,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteEventMutationVariables = {
+  input: DeleteEventInput,
+  condition?: ModelEventConditionInput | null,
+};
+
+export type DeleteEventMutation = {
+  deleteEvent?:  {
+    __typename: "Event",
+    id: string,
+    userID: string,
+    title: string,
+    createdAt: string,
+    content?: string | null,
+    eventTime: string,
+    eventLocation: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoomID: string,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
         updatedAt: string,
       } | null,
       createdAt: string,
@@ -909,6 +1652,18 @@ export type GetUserQuery = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    eventUser?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -931,6 +1686,10 @@ export type ListUsersQuery = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -958,6 +1717,10 @@ export type GetChatRoomUserQuery = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -1152,6 +1915,10 @@ export type GetMessageQuery = {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
       } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1221,6 +1988,288 @@ export type ListMessagesQuery = {
   } | null,
 };
 
+export type GetEventUserQueryVariables = {
+  id: string,
+};
+
+export type GetEventUserQuery = {
+  getEventUser?:  {
+    __typename: "EventUser",
+    id: string,
+    userID: string,
+    eventRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListEventUsersQueryVariables = {
+  filter?: ModelEventUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListEventUsersQuery = {
+  listEventUsers?:  {
+    __typename: "ModelEventUserConnection",
+    items:  Array< {
+      __typename: "EventUser",
+      id: string,
+      userID: string,
+      eventRoomID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetEventRoomQueryVariables = {
+  id: string,
+};
+
+export type GetEventRoomQuery = {
+  getEventRoom?:  {
+    __typename: "EventRoom",
+    id: string,
+    eventUsers?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventID?: string | null,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListEventRoomsQueryVariables = {
+  filter?: ModelEventRoomFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListEventRoomsQuery = {
+  listEventRooms?:  {
+    __typename: "ModelEventRoomConnection",
+    items:  Array< {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetEventQueryVariables = {
+  id: string,
+};
+
+export type GetEventQuery = {
+  getEvent?:  {
+    __typename: "Event",
+    id: string,
+    userID: string,
+    title: string,
+    createdAt: string,
+    content?: string | null,
+    eventTime: string,
+    eventLocation: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoomID: string,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type ListEventsQueryVariables = {
+  filter?: ModelEventFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListEventsQuery = {
+  listEvents?:  {
+    __typename: "ModelEventConnection",
+    items:  Array< {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type MessagesByChatRoomQueryVariables = {
   chatRoomID?: string | null,
   createdAt?: ModelStringKeyConditionInput | null,
@@ -1262,6 +2311,50 @@ export type MessagesByChatRoomQuery = {
   } | null,
 };
 
+export type EventsByEventRoomQueryVariables = {
+  eventRoomID?: string | null,
+  eventTime?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelEventFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type EventsByEventRoomQuery = {
+  eventsByEventRoom?:  {
+    __typename: "ModelEventConnection",
+    items:  Array< {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
@@ -1276,6 +2369,18 @@ export type OnCreateUserSubscription = {
         id: string,
         userID: string,
         chatRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventUser?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
         createdAt: string,
         updatedAt: string,
       } | null >,
@@ -1305,6 +2410,18 @@ export type OnUpdateUserSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    eventUser?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1329,6 +2446,18 @@ export type OnDeleteUserSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
+    eventUser?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1348,6 +2477,10 @@ export type OnCreateChatRoomUserSubscription = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -1398,6 +2531,10 @@ export type OnUpdateChatRoomUserSubscription = {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
       } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1444,6 +2581,10 @@ export type OnDeleteChatRoomUserSubscription = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -1676,6 +2817,10 @@ export type OnCreateMessageSubscription = {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
       } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1723,6 +2868,10 @@ export type OnUpdateMessageSubscription = {
       status?: string | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
       createdAt: string,
@@ -1774,6 +2923,10 @@ export type OnDeleteMessageSubscription = {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
       } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1796,6 +2949,474 @@ export type OnDeleteMessageSubscription = {
         content: string,
         userID: string,
         chatRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateEventUserSubscription = {
+  onCreateEventUser?:  {
+    __typename: "EventUser",
+    id: string,
+    userID: string,
+    eventRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateEventUserSubscription = {
+  onUpdateEventUser?:  {
+    __typename: "EventUser",
+    id: string,
+    userID: string,
+    eventRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteEventUserSubscription = {
+  onDeleteEventUser?:  {
+    __typename: "EventUser",
+    id: string,
+    userID: string,
+    eventRoomID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateEventRoomSubscription = {
+  onCreateEventRoom?:  {
+    __typename: "EventRoom",
+    id: string,
+    eventUsers?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventID?: string | null,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateEventRoomSubscription = {
+  onUpdateEventRoom?:  {
+    __typename: "EventRoom",
+    id: string,
+    eventUsers?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventID?: string | null,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteEventRoomSubscription = {
+  onDeleteEventRoom?:  {
+    __typename: "EventRoom",
+    id: string,
+    eventUsers?:  {
+      __typename: "ModelEventUserConnection",
+      items:  Array< {
+        __typename: "EventUser",
+        id: string,
+        userID: string,
+        eventRoomID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    eventID?: string | null,
+    event?:  {
+      __typename: "Event",
+      id: string,
+      userID: string,
+      title: string,
+      createdAt: string,
+      content?: string | null,
+      eventTime: string,
+      eventLocation: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      eventRoomID: string,
+      eventRoom?:  {
+        __typename: "EventRoom",
+        id: string,
+        eventID?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateEventSubscription = {
+  onCreateEvent?:  {
+    __typename: "Event",
+    id: string,
+    userID: string,
+    title: string,
+    createdAt: string,
+    content?: string | null,
+    eventTime: string,
+    eventLocation: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoomID: string,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateEventSubscription = {
+  onUpdateEvent?:  {
+    __typename: "Event",
+    id: string,
+    userID: string,
+    title: string,
+    createdAt: string,
+    content?: string | null,
+    eventTime: string,
+    eventLocation: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoomID: string,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteEventSubscription = {
+  onDeleteEvent?:  {
+    __typename: "Event",
+    id: string,
+    userID: string,
+    title: string,
+    createdAt: string,
+    content?: string | null,
+    eventTime: string,
+    eventLocation: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    eventRoomID: string,
+    eventRoom?:  {
+      __typename: "EventRoom",
+      id: string,
+      eventUsers?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventID?: string | null,
+      event?:  {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
         updatedAt: string,
       } | null,
       createdAt: string,

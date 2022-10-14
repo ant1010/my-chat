@@ -29,12 +29,15 @@ type User @model @auth(rules: [{ allow: private }]){
   imageUri: String
   status: String
   chatRoomUser: [ChatRoomUser] @connection(keyName: "byUser", fields: ["id"])
+  eventUser:[EventUser] @connection(keyName: "byUser", fields: ["id"])
 }
 
 type ChatRoomUser
 @model @auth(rules: [{ allow: private }])
 @key(name: "byUser", fields: ["userID", "chatRoomID"])
-@key(name: "byChatRoom", fields: ["chatRoomID", "userID"]) {
+@key(name: "byChatRoom", fields: ["chatRoomID", "userID"])
+
+ {
   id: ID!
   userID: ID!
   chatRoomID: ID!
@@ -59,4 +62,33 @@ type Message @model @auth(rules: [{ allow: private }])@key(name : "byChatRoom",f
   user: User @connection(fields: ["userID"])
   chatRoom: ChatRoom @connection(fields: ["chatRoomID"])
   
+}
+type EventUser @model @auth(rules: [{ allow: private }])
+@key(name: "byUser", fields: ["userID", "eventRoomID"])
+@key(name: "byEventRoom", fields: ["eventRoomID", "userID"]){
+  id: ID!
+  userID: ID!
+  eventRoomID: ID!
+  user: User @connection(fields: ["userID"])
+  eventRoom: EventRoom @connection(fields: ["eventRoomID"])
+}
+type EventRoom @model @auth(rules: [{ allow: private }]) {
+  id: ID!
+  eventUsers: [EventUser] @connection(keyName: "byEventRoom", fields: ["id"])
+  eventID:ID
+  event:Event @connection( fields:["eventID"])
+  
+  
+}
+type Event @model @auth(rules: [{ allow: private }])@key(name:"byEventRoom",fields:["eventRoomID","eventTime"],queryField:"eventsByEventRoom"){
+  id:ID!
+  userID:ID!
+  title:String!
+  createdAt:String!
+  content:String
+  eventTime:String!
+  eventLocation:String!
+  user: User @connection(fields: ["userID"])
+  eventRoomID:ID!
+  eventRoom:EventRoom@connection(fields: ["eventRoomID"])
 }

@@ -44,7 +44,6 @@ const InputBox = (props) => {
 
     setMessage('');
   }
-
   
   const onPress = () => {
     if (!message) {

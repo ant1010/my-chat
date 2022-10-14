@@ -19,6 +19,16 @@ export const getUser = /* GraphQL */ `
         }
         nextToken
       }
+      eventUser {
+        items {
+          id
+          userID
+          eventRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -37,6 +47,9 @@ export const listUsers = /* GraphQL */ `
         imageUri
         status
         chatRoomUser {
+          nextToken
+        }
+        eventUser {
           nextToken
         }
         createdAt
@@ -58,6 +71,9 @@ export const getChatRoomUser = /* GraphQL */ `
         imageUri
         status
         chatRoomUser {
+          nextToken
+        }
+        eventUser {
           nextToken
         }
         createdAt
@@ -220,6 +236,9 @@ export const getMessage = /* GraphQL */ `
         chatRoomUser {
           nextToken
         }
+        eventUser {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -280,6 +299,244 @@ export const listMessages = /* GraphQL */ `
     }
   }
 `;
+export const getEventUser = /* GraphQL */ `
+  query GetEventUser($id: ID!) {
+    getEventUser(id: $id) {
+      id
+      userID
+      eventRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listEventUsers = /* GraphQL */ `
+  query ListEventUsers(
+    $filter: ModelEventUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEventUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        eventRoomID
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        eventRoom {
+          id
+          eventID
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getEventRoom = /* GraphQL */ `
+  query GetEventRoom($id: ID!) {
+    getEventRoom(id: $id) {
+      id
+      eventUsers {
+        items {
+          id
+          userID
+          eventRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      eventID
+      event {
+        id
+        userID
+        title
+        createdAt
+        content
+        eventTime
+        eventLocation
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        eventRoomID
+        eventRoom {
+          id
+          eventID
+          createdAt
+          updatedAt
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listEventRooms = /* GraphQL */ `
+  query ListEventRooms(
+    $filter: ModelEventRoomFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEventRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getEvent = /* GraphQL */ `
+  query GetEvent($id: ID!) {
+    getEvent(id: $id) {
+      id
+      userID
+      title
+      createdAt
+      content
+      eventTime
+      eventLocation
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoomID
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const listEvents = /* GraphQL */ `
+  query ListEvents(
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        title
+        createdAt
+        content
+        eventTime
+        eventLocation
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        eventRoomID
+        eventRoom {
+          id
+          eventID
+          createdAt
+          updatedAt
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const messagesByChatRoom = /* GraphQL */ `
   query MessagesByChatRoom(
     $chatRoomID: ID
@@ -314,6 +571,52 @@ export const messagesByChatRoom = /* GraphQL */ `
         chatRoom {
           id
           lastMessageID
+          createdAt
+          updatedAt
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const eventsByEventRoom = /* GraphQL */ `
+  query EventsByEventRoom(
+    $eventRoomID: ID
+    $eventTime: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    eventsByEventRoom(
+      eventRoomID: $eventRoomID
+      eventTime: $eventTime
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userID
+        title
+        createdAt
+        content
+        eventTime
+        eventLocation
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        eventRoomID
+        eventRoom {
+          id
+          eventID
           createdAt
           updatedAt
         }

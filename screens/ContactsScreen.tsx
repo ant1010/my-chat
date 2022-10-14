@@ -25,6 +25,7 @@ export default function ContactsScreen() {
         style={{width: '100%'}}
         data={users}
         renderItem={({ item }) => <ContactListItem user={item} />}
+        numColumns={2}
         keyExtractor={(item) => item.id}
       />
     </View>

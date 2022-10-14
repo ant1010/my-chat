@@ -22,7 +22,7 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
           Contacts: {
             screens: {
-              ContactsScreen: 'Contacts',
+              ContactsScreen: 'Connections',
             },
           },
         },

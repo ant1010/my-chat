@@ -18,13 +18,16 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import ChatsScreen from '../screens/ChatsScreen';
 import ChatRoomScreen from '../screens/ChatRoomScreen'
 import ContactsScreen from '../screens/ContactsScreen';
+import EventsScreen from '../screens/EventsScreen';
+import EventCreation from '../screens/EventCreation';
 import { RootStackParamList, MainTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import SignOut from './HeaderIcons/SignOut'
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={colorScheme === 'dark' ? DarkTheme : DarkTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -42,10 +45,10 @@ function RootNavigator() {
     screenOptions={{
       headerShadowVisible:false,
       headerStyle: {
-        backgroundColor: Colors.light.tint,
+        backgroundColor: Colors.dark.tint,
         
       },
-      headerTintColor: Colors.light.background,
+      headerTintColor: Colors.dark.background,
       
       headerTitleStyle: {
         fontWeight: 'bold',
@@ -60,6 +63,7 @@ function RootNavigator() {
           <View style = {{flexDirection: 'row', width: 60,justifyContent: 'space-between', marginRight:10}}>
           <Octicons name = "search" size = {22} color = {'white'}/>
           <MaterialCommunityIcons name = 'dots-vertical' size = {22} color = {'white'}/>
+          <SignOut/>
           </View>
         )
         
@@ -79,7 +83,11 @@ function RootNavigator() {
         
       
          />
-      <Stack.Screen name="Contacts" component={ContactsScreen} options={{ title: 'Contacts' }} />
+      
+      <Stack.Screen name="Connections" component={ContactsScreen} options={{ title: 'Connections' }} />
+      <Stack.Screen name="Events" component={EventsScreen} options={{ title: 'Events' }} />
+      <Stack.Screen name="EventCreation" component={EventCreation} options={{ title: 'Start a New Event' }} />
+      
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
 
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
@@ -102,15 +110,15 @@ function MainTabNavigator() {
     <MainTab.Navigator
       initialRouteName="Chats"
       screenOptions={{
-        tabBarShowIcon:true,
-        tabBarActiveTintColor:Colors[colorScheme].background,
+        tabBarShowIcon:false,
+        tabBarActiveTintColor:Colors["dark"].background,
         
         tabBarStyle:{
-          backgroundColor: Colors[colorScheme].tint,
+          backgroundColor: Colors["dark"].tint,
         },
         
         tabBarIndicatorStyle:{
-          backgroundColor:Colors[colorScheme].background,
+          backgroundColor:Colors["dark"].background,
           height:4,
         },
         tabBarLabelStyle:{
@@ -118,12 +126,12 @@ function MainTabNavigator() {
         }
       }}>
       <MainTab.Screen
-        name="Camera"
+        name="Connections"
         component={ContactsScreen}
         options={{
           
-          tabBarIcon:({color})=><Fontisto name="camera" color={color} />,
-          tabBarLabel:()=>null,
+          //tabBarIcon:({color})=><Fontisto name="camera" color={color} />,
+         // tabBarLabel:()=>null,
           
         }}
       />
@@ -133,8 +141,8 @@ function MainTabNavigator() {
         
       />
       <MainTab.Screen
-        name="Calls"
-        component={ChatsScreen} options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
+        name="Events"
+        component={EventsScreen} options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
         
       />
       <MainTab.Screen

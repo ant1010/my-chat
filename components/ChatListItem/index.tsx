@@ -16,9 +16,7 @@ import {
 
 }from 'aws-amplify';
 import {useEffect,useState} from 'react';
-import {onCreateMessage} from '../../src/graphql/subscriptions';
-import { Entypo } from '@expo/vector-icons';
-import {updateChatRoom} from "../../src/graphql/mutations";
+
 
 export type ChatListItemProps = {
   chatRoom: ChatRoom;
@@ -48,10 +46,6 @@ const ChatListItem = (props: ChatListItemProps) => {
   
     getOtherUser();
   },[])
-
-  
-
- 
 
   const onClick = () => {
     navigation.navigate("ChatRoom", {

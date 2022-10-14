@@ -22,6 +22,16 @@ export const createUser = /* GraphQL */ `
         }
         nextToken
       }
+      eventUser {
+        items {
+          id
+          userID
+          eventRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -42,6 +52,16 @@ export const updateUser = /* GraphQL */ `
           id
           userID
           chatRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      eventUser {
+        items {
+          id
+          userID
+          eventRoomID
           createdAt
           updatedAt
         }
@@ -72,6 +92,16 @@ export const deleteUser = /* GraphQL */ `
         }
         nextToken
       }
+      eventUser {
+        items {
+          id
+          userID
+          eventRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -92,6 +122,9 @@ export const createChatRoomUser = /* GraphQL */ `
         imageUri
         status
         chatRoomUser {
+          nextToken
+        }
+        eventUser {
           nextToken
         }
         createdAt
@@ -139,6 +172,9 @@ export const updateChatRoomUser = /* GraphQL */ `
         chatRoomUser {
           nextToken
         }
+        eventUser {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -182,6 +218,9 @@ export const deleteChatRoomUser = /* GraphQL */ `
         imageUri
         status
         chatRoomUser {
+          nextToken
+        }
+        eventUser {
           nextToken
         }
         createdAt
@@ -399,6 +438,9 @@ export const createMessage = /* GraphQL */ `
         chatRoomUser {
           nextToken
         }
+        eventUser {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -443,6 +485,9 @@ export const updateMessage = /* GraphQL */ `
         imageUri
         status
         chatRoomUser {
+          nextToken
+        }
+        eventUser {
           nextToken
         }
         createdAt
@@ -491,6 +536,9 @@ export const deleteMessage = /* GraphQL */ `
         chatRoomUser {
           nextToken
         }
+        eventUser {
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -509,6 +557,450 @@ export const deleteMessage = /* GraphQL */ `
           content
           userID
           chatRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const createEventUser = /* GraphQL */ `
+  mutation CreateEventUser(
+    $input: CreateEventUserInput!
+    $condition: ModelEventUserConditionInput
+  ) {
+    createEventUser(input: $input, condition: $condition) {
+      id
+      userID
+      eventRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateEventUser = /* GraphQL */ `
+  mutation UpdateEventUser(
+    $input: UpdateEventUserInput!
+    $condition: ModelEventUserConditionInput
+  ) {
+    updateEventUser(input: $input, condition: $condition) {
+      id
+      userID
+      eventRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteEventUser = /* GraphQL */ `
+  mutation DeleteEventUser(
+    $input: DeleteEventUserInput!
+    $condition: ModelEventUserConditionInput
+  ) {
+    deleteEventUser(input: $input, condition: $condition) {
+      id
+      userID
+      eventRoomID
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createEventRoom = /* GraphQL */ `
+  mutation CreateEventRoom(
+    $input: CreateEventRoomInput!
+    $condition: ModelEventRoomConditionInput
+  ) {
+    createEventRoom(input: $input, condition: $condition) {
+      id
+      eventUsers {
+        items {
+          id
+          userID
+          eventRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      eventID
+      event {
+        id
+        userID
+        title
+        createdAt
+        content
+        eventTime
+        eventLocation
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        eventRoomID
+        eventRoom {
+          id
+          eventID
+          createdAt
+          updatedAt
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateEventRoom = /* GraphQL */ `
+  mutation UpdateEventRoom(
+    $input: UpdateEventRoomInput!
+    $condition: ModelEventRoomConditionInput
+  ) {
+    updateEventRoom(input: $input, condition: $condition) {
+      id
+      eventUsers {
+        items {
+          id
+          userID
+          eventRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      eventID
+      event {
+        id
+        userID
+        title
+        createdAt
+        content
+        eventTime
+        eventLocation
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        eventRoomID
+        eventRoom {
+          id
+          eventID
+          createdAt
+          updatedAt
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteEventRoom = /* GraphQL */ `
+  mutation DeleteEventRoom(
+    $input: DeleteEventRoomInput!
+    $condition: ModelEventRoomConditionInput
+  ) {
+    deleteEventRoom(input: $input, condition: $condition) {
+      id
+      eventUsers {
+        items {
+          id
+          userID
+          eventRoomID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      eventID
+      event {
+        id
+        userID
+        title
+        createdAt
+        content
+        eventTime
+        eventLocation
+        user {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        eventRoomID
+        eventRoom {
+          id
+          eventID
+          createdAt
+          updatedAt
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    createEvent(input: $input, condition: $condition) {
+      id
+      userID
+      title
+      createdAt
+      content
+      eventTime
+      eventLocation
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoomID
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    updateEvent(input: $input, condition: $condition) {
+      id
+      userID
+      title
+      createdAt
+      content
+      eventTime
+      eventLocation
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoomID
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      updatedAt
+    }
+  }
+`;
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    deleteEvent(input: $input, condition: $condition) {
+      id
+      userID
+      title
+      createdAt
+      content
+      eventTime
+      eventLocation
+      user {
+        id
+        name
+        imageUri
+        status
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      eventRoomID
+      eventRoom {
+        id
+        eventUsers {
+          nextToken
+        }
+        eventID
+        event {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
           updatedAt
         }
         createdAt

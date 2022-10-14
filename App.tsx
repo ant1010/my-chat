@@ -6,7 +6,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import {getUser} from './src/graphql/queries';
 import {createUser} from './src/graphql/mutations';
-import {onCreateMessage} from './src/graphql/subscriptions';
+
 
 // @ts-ignore
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -63,22 +63,9 @@ useEffect(() => {
   fetchUser();
 },[])
 
-useEffect(() =>{
-  const subscription = API.graphql(
-    graphqlOperation(onCreateMessage)).subscribe({next:(data) => {
-      const newMessage = data.value.data.onCreateMessage;
-      console.log(newMessage);
-      
 
-       console.log(data)
-      // setMessages([newMessage, ...messages]);
-
-     
-      
-    }})
   
-  return () => subscription.unsubscribe();
-},[])
+  
 
 
   if (!isLoadingComplete) {
@@ -86,7 +73,7 @@ useEffect(() =>{
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
+        <Navigation colorScheme={"dark"} />
         <StatusBar />
       </SafeAreaProvider>
     );

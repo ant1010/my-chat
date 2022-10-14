@@ -43,8 +43,6 @@ export default function ChatsScreen() {
 
     useEffect(() => {
          
-        
-
         fetchChatRooms();
         
      }, [])
@@ -53,14 +51,9 @@ export default function ChatsScreen() {
           graphqlOperation(onCreateMessage)).subscribe({next:(data) => {
             const newMessage = data.value.data.onCreateMessage;
             console.log(newMessage.id);
-            
-           
              console.log(data)
-            updateChatRoomLastMessage(newMessage.id,newMessage.chatRoomID);
+             updateChatRoomLastMessage(newMessage.id,newMessage.chatRoomID);
              fetchChatRooms();
-      
-           
-            
           }})
           return () => subscription.unsubscribe();
         },[])

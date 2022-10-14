@@ -30,8 +30,7 @@ const ContactListItem = (props: ContactListItemProps) => {
       const currUserInfo = await API.graphql(graphqlOperation(getUser,{id:currUser.attributes.sub}));
       const user1 = userInfo.data.getUser.chatRoomUser.items;
       const user2 = currUserInfo.data.getUser.chatRoomUser.items;
-      console.log(user1[0].chatRoom.chatRoomUsers.items.length);
-      console.log(user1);
+      
       var result = user1.filter(function(o1){
         
         return user2.some(function(o2){

@@ -9,7 +9,7 @@ const NewMessageButton = () => {
   const navigation = useNavigation();
 
   const onPress = () => {
-    navigation.navigate('Contacts');
+    navigation.navigate('Connections');
   }
 
   return (
@@ -18,7 +18,7 @@ const NewMessageButton = () => {
         <MaterialCommunityIcons
           name="message-reply-text"
           size={28}
-          color="white"
+          color="black"
         />
       </TouchableOpacity>
     </View>

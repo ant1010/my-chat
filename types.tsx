@@ -17,9 +17,11 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
-  Contacts: undefined;
+  Connections: undefined;
   ChatRoom: undefined;
   Calls:undefined;
+  Events:undefined;
+  EventCreation:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -29,10 +31,12 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 
 export type RootTabParamList = {
   Chats: undefined;
-  Contacts: undefined;
+  Connections: undefined;
   Status: undefined;
   Calls: undefined;
   Camera:undefined;
+  Events:undefined;
+  EventCreation:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
@@ -40,7 +44,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   NativeStackScreenProps<RootStackParamList>
 >;
 export type MainTabParamList = {
-  Contacts: undefined;
+  Connections: undefined;
   Chats: undefined;
   Status: undefined;
   Calls: undefined;
@@ -70,5 +74,12 @@ export type ChatRoom = {
   id: String;
   users: User[];
   lastMessage: Message;
+  chatRoomUsers:any;
   
+}
+export type Event = {
+  id: String;
+  content:String;
+  eventTime:String;
+  user:User;
 }
