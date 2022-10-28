@@ -45,10 +45,10 @@ function RootNavigator() {
     screenOptions={{
       headerShadowVisible:false,
       headerStyle: {
-        backgroundColor: Colors.dark.tint,
+        backgroundColor: 'black',
         
       },
-      headerTintColor: Colors.dark.background,
+      headerTintColor: Colors.dark.text,
       
       headerTitleStyle: {
         fontWeight: 'bold',
@@ -111,14 +111,14 @@ function MainTabNavigator() {
       initialRouteName="Chats"
       screenOptions={{
         tabBarShowIcon:false,
-        tabBarActiveTintColor:Colors["dark"].background,
+        tabBarActiveTintColor:Colors["dark"].text,
         
         tabBarStyle:{
           backgroundColor: Colors["dark"].tint,
         },
         
         tabBarIndicatorStyle:{
-          backgroundColor:Colors["dark"].background,
+          backgroundColor:Colors["dark"].tabIconSelected,
           height:4,
         },
         tabBarLabelStyle:{
@@ -137,7 +137,7 @@ function MainTabNavigator() {
       />
       <MainTab.Screen
         name="Chats"
-        component={ChatsScreen} options={{tabBarLabelStyle:{fontWeight:"bold",fontSize:12}}}
+        component={EventCreation} options={{tabBarLabelStyle:{fontWeight:"bold",fontSize:12}}}
         
       />
       <MainTab.Screen

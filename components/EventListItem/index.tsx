@@ -24,7 +24,7 @@ const EventListItem = (props: EventListItemProps) => {
   
  
   
-   
+   console.log(event);
   
   const navigation = useNavigation();
 
@@ -45,7 +45,7 @@ const EventListItem = (props: EventListItemProps) => {
             <Text style={styles.status}>{event.title}</Text>
             <Text style={styles.status}>{event.content}</Text>
             
-            {/*<Text numberOfLines={2} style={styles.status}>{user.status}</Text>*/}
+          
           </View>
         </View>
       

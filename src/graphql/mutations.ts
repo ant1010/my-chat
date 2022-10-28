@@ -12,6 +12,28 @@ export const createUser = /* GraphQL */ `
       name
       imageUri
       status
+      friends {
+        id
+        name
+        imageUri
+        status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       chatRoomUser {
         items {
           id
@@ -47,6 +69,28 @@ export const updateUser = /* GraphQL */ `
       name
       imageUri
       status
+      friends {
+        id
+        name
+        imageUri
+        status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       chatRoomUser {
         items {
           id
@@ -82,6 +126,28 @@ export const deleteUser = /* GraphQL */ `
       name
       imageUri
       status
+      friends {
+        id
+        name
+        imageUri
+        status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       chatRoomUser {
         items {
           id
@@ -121,6 +187,14 @@ export const createChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -169,6 +243,14 @@ export const updateChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -217,6 +299,14 @@ export const deleteChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -435,6 +525,14 @@ export const createMessage = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -484,6 +582,14 @@ export const updateMessage = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -533,6 +639,14 @@ export const deleteMessage = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -580,6 +694,14 @@ export const createEventUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -594,8 +716,11 @@ export const createEventUser = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -628,6 +753,14 @@ export const updateEventUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -642,8 +775,11 @@ export const updateEventUser = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -676,6 +812,14 @@ export const deleteEventUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -690,8 +834,11 @@ export const deleteEventUser = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -727,8 +874,22 @@ export const createEventRoom = /* GraphQL */ `
         }
         nextToken
       }
-      eventID
-      event {
+      events {
+        items {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        nextToken
+      }
+      lastEventID
+      lastEvent {
         id
         userID
         title
@@ -747,7 +908,7 @@ export const createEventRoom = /* GraphQL */ `
         eventRoomID
         eventRoom {
           id
-          eventID
+          lastEventID
           createdAt
           updatedAt
         }
@@ -775,8 +936,22 @@ export const updateEventRoom = /* GraphQL */ `
         }
         nextToken
       }
-      eventID
-      event {
+      events {
+        items {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        nextToken
+      }
+      lastEventID
+      lastEvent {
         id
         userID
         title
@@ -795,7 +970,7 @@ export const updateEventRoom = /* GraphQL */ `
         eventRoomID
         eventRoom {
           id
-          eventID
+          lastEventID
           createdAt
           updatedAt
         }
@@ -823,8 +998,22 @@ export const deleteEventRoom = /* GraphQL */ `
         }
         nextToken
       }
-      eventID
-      event {
+      events {
+        items {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        nextToken
+      }
+      lastEventID
+      lastEvent {
         id
         userID
         title
@@ -843,7 +1032,7 @@ export const deleteEventRoom = /* GraphQL */ `
         eventRoomID
         eventRoom {
           id
-          eventID
+          lastEventID
           createdAt
           updatedAt
         }
@@ -872,6 +1061,14 @@ export const createEvent = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -887,8 +1084,11 @@ export const createEvent = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -924,6 +1124,14 @@ export const updateEvent = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -939,8 +1147,11 @@ export const updateEvent = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -976,6 +1187,14 @@ export const deleteEvent = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -991,8 +1210,11 @@ export const deleteEvent = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title

@@ -64,6 +64,7 @@ export type User = {
   name: string,
   imageUri?: string | null,
   status?: string | null,
+  friends?:  Array<User | null > | null,
   chatRoomUser?: ModelChatRoomUserConnection | null,
   eventUser?: ModelEventUserConnection | null,
   createdAt: string,
@@ -137,10 +138,17 @@ export type EventRoom = {
   __typename: "EventRoom",
   id: string,
   eventUsers?: ModelEventUserConnection | null,
-  eventID?: string | null,
-  event?: Event | null,
+  events?: ModelEventConnection | null,
+  lastEventID?: string | null,
+  lastEvent?: Event | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export type ModelEventConnection = {
+  __typename: "ModelEventConnection",
+  items:  Array<Event | null >,
+  nextToken?: string | null,
 };
 
 export type Event = {
@@ -286,11 +294,11 @@ export type DeleteEventUserInput = {
 
 export type CreateEventRoomInput = {
   id?: string | null,
-  eventID?: string | null,
+  lastEventID?: string | null,
 };
 
 export type ModelEventRoomConditionInput = {
-  eventID?: ModelIDInput | null,
+  lastEventID?: ModelIDInput | null,
   and?: Array< ModelEventRoomConditionInput | null > | null,
   or?: Array< ModelEventRoomConditionInput | null > | null,
   not?: ModelEventRoomConditionInput | null,
@@ -298,7 +306,7 @@ export type ModelEventRoomConditionInput = {
 
 export type UpdateEventRoomInput = {
   id: string,
-  eventID?: string | null,
+  lastEventID?: string | null,
 };
 
 export type DeleteEventRoomInput = {
@@ -405,7 +413,7 @@ export type ModelEventUserFilterInput = {
 
 export type ModelEventRoomFilterInput = {
   id?: ModelIDInput | null,
-  eventID?: ModelIDInput | null,
+  lastEventID?: ModelIDInput | null,
   and?: Array< ModelEventRoomFilterInput | null > | null,
   or?: Array< ModelEventRoomFilterInput | null > | null,
   not?: ModelEventRoomFilterInput | null,
@@ -429,12 +437,6 @@ export type ModelEventFilterInput = {
   and?: Array< ModelEventFilterInput | null > | null,
   or?: Array< ModelEventFilterInput | null > | null,
   not?: ModelEventFilterInput | null,
-};
-
-export type ModelEventConnection = {
-  __typename: "ModelEventConnection",
-  items:  Array<Event | null >,
-  nextToken?: string | null,
 };
 
 export type ModelStringKeyConditionInput = {
@@ -465,6 +467,32 @@ export type CreateUserMutation = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
+    friends?:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -506,6 +534,32 @@ export type UpdateUserMutation = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
+    friends?:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -547,6 +601,32 @@ export type DeleteUserMutation = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
+    friends?:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -593,6 +673,15 @@ export type CreateChatRoomUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -650,6 +739,15 @@ export type UpdateChatRoomUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -707,6 +805,15 @@ export type DeleteChatRoomUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -961,6 +1068,15 @@ export type CreateMessageMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1019,6 +1135,15 @@ export type UpdateMessageMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1077,6 +1202,15 @@ export type DeleteMessageMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1133,6 +1267,15 @@ export type CreateEventUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1151,8 +1294,12 @@ export type CreateEventUserMutation = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -1189,6 +1336,15 @@ export type UpdateEventUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1207,8 +1363,12 @@ export type UpdateEventUserMutation = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -1245,6 +1405,15 @@ export type DeleteEventUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1263,8 +1432,12 @@ export type DeleteEventUserMutation = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -1305,8 +1478,24 @@ export type CreateEventRoomMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    eventID?: string | null,
-    event?:  {
+    events?:  {
+      __typename: "ModelEventConnection",
+      items:  Array< {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    lastEventID?: string | null,
+    lastEvent?:  {
       __typename: "Event",
       id: string,
       userID: string,
@@ -1328,7 +1517,7 @@ export type CreateEventRoomMutation = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1360,8 +1549,24 @@ export type UpdateEventRoomMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    eventID?: string | null,
-    event?:  {
+    events?:  {
+      __typename: "ModelEventConnection",
+      items:  Array< {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    lastEventID?: string | null,
+    lastEvent?:  {
       __typename: "Event",
       id: string,
       userID: string,
@@ -1383,7 +1588,7 @@ export type UpdateEventRoomMutation = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1415,8 +1620,24 @@ export type DeleteEventRoomMutation = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    eventID?: string | null,
-    event?:  {
+    events?:  {
+      __typename: "ModelEventConnection",
+      items:  Array< {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    lastEventID?: string | null,
+    lastEvent?:  {
       __typename: "Event",
       id: string,
       userID: string,
@@ -1438,7 +1659,7 @@ export type DeleteEventRoomMutation = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1470,6 +1691,15 @@ export type CreateEventMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1489,8 +1719,12 @@ export type CreateEventMutation = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -1530,6 +1764,15 @@ export type UpdateEventMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1549,8 +1792,12 @@ export type UpdateEventMutation = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -1590,6 +1837,15 @@ export type DeleteEventMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1609,8 +1865,12 @@ export type DeleteEventMutation = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -1640,6 +1900,32 @@ export type GetUserQuery = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
+    friends?:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -1684,6 +1970,15 @@ export type ListUsersQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1715,6 +2010,15 @@ export type GetChatRoomUserQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1911,6 +2215,15 @@ export type GetMessageQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2004,6 +2317,15 @@ export type GetEventUserQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2022,8 +2344,12 @@ export type GetEventUserQuery = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -2069,7 +2395,7 @@ export type ListEventUsersQuery = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2100,8 +2426,24 @@ export type GetEventRoomQuery = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    eventID?: string | null,
-    event?:  {
+    events?:  {
+      __typename: "ModelEventConnection",
+      items:  Array< {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    lastEventID?: string | null,
+    lastEvent?:  {
       __typename: "Event",
       id: string,
       userID: string,
@@ -2123,7 +2465,7 @@ export type GetEventRoomQuery = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2150,8 +2492,12 @@ export type ListEventRoomsQuery = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -2190,6 +2536,15 @@ export type GetEventQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2209,8 +2564,12 @@ export type GetEventQuery = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -2260,7 +2619,7 @@ export type ListEventsQuery = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2345,7 +2704,7 @@ export type EventsByEventRoomQuery = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2362,6 +2721,32 @@ export type OnCreateUserSubscription = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
+    friends?:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -2398,6 +2783,32 @@ export type OnUpdateUserSubscription = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
+    friends?:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -2434,6 +2845,32 @@ export type OnDeleteUserSubscription = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
+    friends?:  Array< {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null > | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -2475,6 +2912,15 @@ export type OnCreateChatRoomUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2527,6 +2973,15 @@ export type OnUpdateChatRoomUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2579,6 +3034,15 @@ export type OnDeleteChatRoomUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2813,6 +3277,15 @@ export type OnCreateMessageSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2866,6 +3339,15 @@ export type OnUpdateMessageSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2919,6 +3401,15 @@ export type OnDeleteMessageSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2970,6 +3461,15 @@ export type OnCreateEventUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2988,8 +3488,12 @@ export type OnCreateEventUserSubscription = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -3021,6 +3525,15 @@ export type OnUpdateEventUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3039,8 +3552,12 @@ export type OnUpdateEventUserSubscription = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -3072,6 +3589,15 @@ export type OnDeleteEventUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3090,8 +3616,12 @@ export type OnDeleteEventUserSubscription = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -3127,8 +3657,24 @@ export type OnCreateEventRoomSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    eventID?: string | null,
-    event?:  {
+    events?:  {
+      __typename: "ModelEventConnection",
+      items:  Array< {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    lastEventID?: string | null,
+    lastEvent?:  {
       __typename: "Event",
       id: string,
       userID: string,
@@ -3150,7 +3696,7 @@ export type OnCreateEventRoomSubscription = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3177,8 +3723,24 @@ export type OnUpdateEventRoomSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    eventID?: string | null,
-    event?:  {
+    events?:  {
+      __typename: "ModelEventConnection",
+      items:  Array< {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    lastEventID?: string | null,
+    lastEvent?:  {
       __typename: "Event",
       id: string,
       userID: string,
@@ -3200,7 +3762,7 @@ export type OnUpdateEventRoomSubscription = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3227,8 +3789,24 @@ export type OnDeleteEventRoomSubscription = {
       } | null >,
       nextToken?: string | null,
     } | null,
-    eventID?: string | null,
-    event?:  {
+    events?:  {
+      __typename: "ModelEventConnection",
+      items:  Array< {
+        __typename: "Event",
+        id: string,
+        userID: string,
+        title: string,
+        createdAt: string,
+        content?: string | null,
+        eventTime: string,
+        eventLocation: string,
+        eventRoomID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    lastEventID?: string | null,
+    lastEvent?:  {
       __typename: "Event",
       id: string,
       userID: string,
@@ -3250,7 +3828,7 @@ export type OnDeleteEventRoomSubscription = {
       eventRoom?:  {
         __typename: "EventRoom",
         id: string,
-        eventID?: string | null,
+        lastEventID?: string | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3277,6 +3855,15 @@ export type OnCreateEventSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3296,8 +3883,12 @@ export type OnCreateEventSubscription = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -3332,6 +3923,15 @@ export type OnUpdateEventSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3351,8 +3951,12 @@ export type OnUpdateEventSubscription = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,
@@ -3387,6 +3991,15 @@ export type OnDeleteEventSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
+      friends?:  Array< {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null > | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3406,8 +4019,12 @@ export type OnDeleteEventSubscription = {
         __typename: "ModelEventUserConnection",
         nextToken?: string | null,
       } | null,
-      eventID?: string | null,
-      event?:  {
+      events?:  {
+        __typename: "ModelEventConnection",
+        nextToken?: string | null,
+      } | null,
+      lastEventID?: string | null,
+      lastEvent?:  {
         __typename: "Event",
         id: string,
         userID: string,

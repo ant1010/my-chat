@@ -34,7 +34,7 @@ export default function ChatsScreen() {
         
             setChatRooms(userData.data.getUser.chatRoomUser.items);
             
-            console.log(userData.data.getUser.chatRoomUser.items);
+            console.log(userData.data.getUser);
         }catch(e){
             console.log(e);
         }
@@ -46,6 +46,11 @@ export default function ChatsScreen() {
         fetchChatRooms();
         
      }, [])
+     useEffect(() => {
+         
+      console.log(chatRooms)
+      
+   }, [chatRooms])
      useEffect(() =>{
         const subscription = API.graphql(
           graphqlOperation(onCreateMessage)).subscribe({next:(data) => {

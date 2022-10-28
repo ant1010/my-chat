@@ -28,9 +28,14 @@ type User @model @auth(rules: [{ allow: private }]){
   name: String!
   imageUri: String
   status: String
+  friends:[User]
   chatRoomUser: [ChatRoomUser] @connection(keyName: "byUser", fields: ["id"])
   eventUser:[EventUser] @connection(keyName: "byUser", fields: ["id"])
 }
+# type Friends @model @auth(rules: [{ allow: private }]){
+#   id:ID!
+#   friendPair:[User]@connection(keyName: "byFriend", fields: ["id"])
+# }
 
 type ChatRoomUser
 @model @auth(rules: [{ allow: private }])
@@ -75,9 +80,9 @@ type EventUser @model @auth(rules: [{ allow: private }])
 type EventRoom @model @auth(rules: [{ allow: private }]) {
   id: ID!
   eventUsers: [EventUser] @connection(keyName: "byEventRoom", fields: ["id"])
-  eventID:ID
-  event:Event @connection( fields:["eventID"])
-  
+  events:[Event] @connection( keyName:"byEventRoom",fields:["id"])
+  lastEventID:ID
+  lastEvent:Event @connection(fields:["lastEventID"])
   
 }
 type Event @model @auth(rules: [{ allow: private }])@key(name:"byEventRoom",fields:["eventRoomID","eventTime"],queryField:"eventsByEventRoom"){

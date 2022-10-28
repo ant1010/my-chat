@@ -39,6 +39,53 @@ export const getUser = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      eventUser {
+      items {
+        id
+        eventRoomID
+        eventRoom {
+          events {
+            items {
+              content
+              createdAt
+              eventLocation
+              title
+              eventTime
+              updatedAt
+              userID
+            }
+          }
+          eventUsers {
+            items {
+              user {
+                name
+                imageUri
+                id
+                status
+              }
+            }
+          }
+        }
+      }
+    }
+    }
+  }
+`;
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        name
+        imageUri
+        id
+        status
+       
+      }
+      nextToken
     }
   }
 `;

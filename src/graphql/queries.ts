@@ -9,6 +9,28 @@ export const getUser = /* GraphQL */ `
       name
       imageUri
       status
+      friends {
+        id
+        name
+        imageUri
+        status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
       chatRoomUser {
         items {
           id
@@ -46,6 +68,14 @@ export const listUsers = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -70,6 +100,14 @@ export const getChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -233,6 +271,14 @@ export const getMessage = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -310,6 +356,14 @@ export const getEventUser = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -324,8 +378,11 @@ export const getEventUser = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -365,7 +422,7 @@ export const listEventUsers = /* GraphQL */ `
         }
         eventRoom {
           id
-          eventID
+          lastEventID
           createdAt
           updatedAt
         }
@@ -390,8 +447,22 @@ export const getEventRoom = /* GraphQL */ `
         }
         nextToken
       }
-      eventID
-      event {
+      events {
+        items {
+          id
+          userID
+          title
+          createdAt
+          content
+          eventTime
+          eventLocation
+          eventRoomID
+          updatedAt
+        }
+        nextToken
+      }
+      lastEventID
+      lastEvent {
         id
         userID
         title
@@ -410,7 +481,7 @@ export const getEventRoom = /* GraphQL */ `
         eventRoomID
         eventRoom {
           id
-          eventID
+          lastEventID
           createdAt
           updatedAt
         }
@@ -433,8 +504,11 @@ export const listEventRooms = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -467,6 +541,14 @@ export const getEvent = /* GraphQL */ `
         name
         imageUri
         status
+        friends {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+        }
         chatRoomUser {
           nextToken
         }
@@ -482,8 +564,11 @@ export const getEvent = /* GraphQL */ `
         eventUsers {
           nextToken
         }
-        eventID
-        event {
+        events {
+          nextToken
+        }
+        lastEventID
+        lastEvent {
           id
           userID
           title
@@ -527,7 +612,7 @@ export const listEvents = /* GraphQL */ `
         eventRoomID
         eventRoom {
           id
-          eventID
+          lastEventID
           createdAt
           updatedAt
         }
@@ -616,7 +701,7 @@ export const eventsByEventRoom = /* GraphQL */ `
         eventRoomID
         eventRoom {
           id
-          eventID
+          lastEventID
           createdAt
           updatedAt
         }
