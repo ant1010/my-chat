@@ -198,7 +198,7 @@ const EventInput = ({ postEvent }) => {
                     keyExtractor={item => item.id}
                     numColumns={2}
                 />
-
+               
             </View>
 
 

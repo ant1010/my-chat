@@ -20,6 +20,7 @@ import ChatRoomScreen from '../screens/ChatRoomScreen'
 import ContactsScreen from '../screens/ContactsScreen';
 import EventsScreen from '../screens/EventsScreen';
 import EventCreation from '../screens/EventCreation';
+import StatusScreen from '../screens/StatusScreen';
 import { RootStackParamList, MainTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import SignOut from './HeaderIcons/SignOut'
@@ -87,6 +88,7 @@ function RootNavigator() {
       <Stack.Screen name="Connections" component={ContactsScreen} options={{ title: 'Connections' }} />
       <Stack.Screen name="Events" component={EventsScreen} options={{ title: 'Events' }} />
       <Stack.Screen name="EventCreation" component={EventCreation} options={{ title: 'Start a New Event' }} />
+      <Stack.Screen name="Status" component={StatusScreen} options={{ title: 'Status' }} />
       
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
 
@@ -147,7 +149,7 @@ function MainTabNavigator() {
       />
       <MainTab.Screen
         name="Status"
-        component={ChatsScreen}options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
+        component={StatusScreen}options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
         
       />
     </MainTab.Navigator>

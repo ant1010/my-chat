@@ -64,11 +64,31 @@ export type User = {
   name: string,
   imageUri?: string | null,
   status?: string | null,
-  friends?:  Array<User | null > | null,
+  contacts?: ModelFriendPairConnection | null,
   chatRoomUser?: ModelChatRoomUserConnection | null,
   eventUser?: ModelEventUserConnection | null,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
+};
+
+export type ModelFriendPairConnection = {
+  __typename: "ModelFriendPairConnection",
+  items:  Array<FriendPair | null >,
+  nextToken?: string | null,
+};
+
+export type FriendPair = {
+  __typename: "FriendPair",
+  id: string,
+  firstUserID: string,
+  secondUserID: string,
+  userOne?: User | null,
+  userTwo?: User | null,
+  status?: string | null,
+  createdAt: string,
+  updatedAt: string,
+  owner?: string | null,
 };
 
 export type ModelChatRoomUserConnection = {
@@ -177,18 +197,20 @@ export type DeleteUserInput = {
   id: string,
 };
 
-export type CreateChatRoomUserInput = {
+export type CreateFriendPairInput = {
   id?: string | null,
-  userID: string,
-  chatRoomID: string,
+  firstUserID: string,
+  secondUserID: string,
+  status?: string | null,
 };
 
-export type ModelChatRoomUserConditionInput = {
-  userID?: ModelIDInput | null,
-  chatRoomID?: ModelIDInput | null,
-  and?: Array< ModelChatRoomUserConditionInput | null > | null,
-  or?: Array< ModelChatRoomUserConditionInput | null > | null,
-  not?: ModelChatRoomUserConditionInput | null,
+export type ModelFriendPairConditionInput = {
+  firstUserID?: ModelIDInput | null,
+  secondUserID?: ModelIDInput | null,
+  status?: ModelStringInput | null,
+  and?: Array< ModelFriendPairConditionInput | null > | null,
+  or?: Array< ModelFriendPairConditionInput | null > | null,
+  not?: ModelFriendPairConditionInput | null,
 };
 
 export type ModelIDInput = {
@@ -205,6 +227,31 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
+};
+
+export type UpdateFriendPairInput = {
+  id: string,
+  firstUserID?: string | null,
+  secondUserID?: string | null,
+  status?: string | null,
+};
+
+export type DeleteFriendPairInput = {
+  id: string,
+};
+
+export type CreateChatRoomUserInput = {
+  id?: string | null,
+  userID: string,
+  chatRoomID: string,
+};
+
+export type ModelChatRoomUserConditionInput = {
+  userID?: ModelIDInput | null,
+  chatRoomID?: ModelIDInput | null,
+  and?: Array< ModelChatRoomUserConditionInput | null > | null,
+  or?: Array< ModelChatRoomUserConditionInput | null > | null,
+  not?: ModelChatRoomUserConditionInput | null,
 };
 
 export type UpdateChatRoomUserInput = {
@@ -368,6 +415,16 @@ export type ModelUserConnection = {
   nextToken?: string | null,
 };
 
+export type ModelFriendPairFilterInput = {
+  id?: ModelIDInput | null,
+  firstUserID?: ModelIDInput | null,
+  secondUserID?: ModelIDInput | null,
+  status?: ModelStringInput | null,
+  and?: Array< ModelFriendPairFilterInput | null > | null,
+  or?: Array< ModelFriendPairFilterInput | null > | null,
+  not?: ModelFriendPairFilterInput | null,
+};
+
 export type ModelChatRoomUserFilterInput = {
   id?: ModelIDInput | null,
   userID?: ModelIDInput | null,
@@ -467,32 +524,20 @@ export type CreateUserMutation = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
-    friends?:  Array< {
-      __typename: "User",
-      id: string,
-      name: string,
-      imageUri?: string | null,
-      status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
+    contacts?:  {
+      __typename: "ModelFriendPairConnection",
+      items:  Array< {
+        __typename: "FriendPair",
         id: string,
-        name: string,
-        imageUri?: string | null,
+        firstUserID: string,
+        secondUserID: string,
         status?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
-      chatRoomUser?:  {
-        __typename: "ModelChatRoomUserConnection",
-        nextToken?: string | null,
-      } | null,
-      eventUser?:  {
-        __typename: "ModelEventUserConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -519,6 +564,7 @@ export type CreateUserMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -534,32 +580,20 @@ export type UpdateUserMutation = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
-    friends?:  Array< {
-      __typename: "User",
-      id: string,
-      name: string,
-      imageUri?: string | null,
-      status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
+    contacts?:  {
+      __typename: "ModelFriendPairConnection",
+      items:  Array< {
+        __typename: "FriendPair",
         id: string,
-        name: string,
-        imageUri?: string | null,
+        firstUserID: string,
+        secondUserID: string,
         status?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
-      chatRoomUser?:  {
-        __typename: "ModelChatRoomUserConnection",
-        nextToken?: string | null,
-      } | null,
-      eventUser?:  {
-        __typename: "ModelEventUserConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -586,6 +620,7 @@ export type UpdateUserMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -601,32 +636,20 @@ export type DeleteUserMutation = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
-    friends?:  Array< {
-      __typename: "User",
-      id: string,
-      name: string,
-      imageUri?: string | null,
-      status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
+    contacts?:  {
+      __typename: "ModelFriendPairConnection",
+      items:  Array< {
+        __typename: "FriendPair",
         id: string,
-        name: string,
-        imageUri?: string | null,
+        firstUserID: string,
+        secondUserID: string,
         status?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
-      chatRoomUser?:  {
-        __typename: "ModelChatRoomUserConnection",
-        nextToken?: string | null,
-      } | null,
-      eventUser?:  {
-        __typename: "ModelEventUserConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -653,6 +676,193 @@ export type DeleteUserMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type CreateFriendPairMutationVariables = {
+  input: CreateFriendPairInput,
+  condition?: ModelFriendPairConditionInput | null,
+};
+
+export type CreateFriendPairMutation = {
+  createFriendPair?:  {
+    __typename: "FriendPair",
+    id: string,
+    firstUserID: string,
+    secondUserID: string,
+    userOne?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    userTwo?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    status?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateFriendPairMutationVariables = {
+  input: UpdateFriendPairInput,
+  condition?: ModelFriendPairConditionInput | null,
+};
+
+export type UpdateFriendPairMutation = {
+  updateFriendPair?:  {
+    __typename: "FriendPair",
+    id: string,
+    firstUserID: string,
+    secondUserID: string,
+    userOne?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    userTwo?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    status?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteFriendPairMutationVariables = {
+  input: DeleteFriendPairInput,
+  condition?: ModelFriendPairConditionInput | null,
+};
+
+export type DeleteFriendPairMutation = {
+  deleteFriendPair?:  {
+    __typename: "FriendPair",
+    id: string,
+    firstUserID: string,
+    secondUserID: string,
+    userOne?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    userTwo?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    status?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -673,15 +883,10 @@ export type CreateChatRoomUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -692,6 +897,7 @@ export type CreateChatRoomUserMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -739,15 +945,10 @@ export type UpdateChatRoomUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -758,6 +959,7 @@ export type UpdateChatRoomUserMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -805,15 +1007,10 @@ export type DeleteChatRoomUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -824,6 +1021,7 @@ export type DeleteChatRoomUserMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -904,6 +1102,7 @@ export type CreateChatRoomMutation = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -969,6 +1168,7 @@ export type UpdateChatRoomMutation = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -1034,6 +1234,7 @@ export type DeleteChatRoomMutation = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -1068,15 +1269,10 @@ export type CreateMessageMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1087,6 +1283,7 @@ export type CreateMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -1135,15 +1332,10 @@ export type UpdateMessageMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1154,6 +1346,7 @@ export type UpdateMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -1202,15 +1395,10 @@ export type DeleteMessageMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1221,6 +1409,7 @@ export type DeleteMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -1267,15 +1456,10 @@ export type CreateEventUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1286,6 +1470,7 @@ export type CreateEventUserMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoom?:  {
       __typename: "EventRoom",
@@ -1336,15 +1521,10 @@ export type UpdateEventUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1355,6 +1535,7 @@ export type UpdateEventUserMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoom?:  {
       __typename: "EventRoom",
@@ -1405,15 +1586,10 @@ export type DeleteEventUserMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1424,6 +1600,7 @@ export type DeleteEventUserMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoom?:  {
       __typename: "EventRoom",
@@ -1512,6 +1689,7 @@ export type CreateEventRoomMutation = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -1583,6 +1761,7 @@ export type UpdateEventRoomMutation = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -1654,6 +1833,7 @@ export type DeleteEventRoomMutation = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -1691,15 +1871,10 @@ export type CreateEventMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1710,6 +1885,7 @@ export type CreateEventMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoomID: string,
     eventRoom?:  {
@@ -1764,15 +1940,10 @@ export type UpdateEventMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1783,6 +1954,7 @@ export type UpdateEventMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoomID: string,
     eventRoom?:  {
@@ -1837,15 +2009,10 @@ export type DeleteEventMutation = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1856,6 +2023,7 @@ export type DeleteEventMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoomID: string,
     eventRoom?:  {
@@ -1900,32 +2068,20 @@ export type GetUserQuery = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
-    friends?:  Array< {
-      __typename: "User",
-      id: string,
-      name: string,
-      imageUri?: string | null,
-      status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
+    contacts?:  {
+      __typename: "ModelFriendPairConnection",
+      items:  Array< {
+        __typename: "FriendPair",
         id: string,
-        name: string,
-        imageUri?: string | null,
+        firstUserID: string,
+        secondUserID: string,
         status?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
-      chatRoomUser?:  {
-        __typename: "ModelChatRoomUserConnection",
-        nextToken?: string | null,
-      } | null,
-      eventUser?:  {
-        __typename: "ModelEventUserConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -1952,6 +2108,7 @@ export type GetUserQuery = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1970,15 +2127,10 @@ export type ListUsersQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -1989,6 +2141,111 @@ export type ListUsersQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetFriendPairQueryVariables = {
+  id: string,
+};
+
+export type GetFriendPairQuery = {
+  getFriendPair?:  {
+    __typename: "FriendPair",
+    id: string,
+    firstUserID: string,
+    secondUserID: string,
+    userOne?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    userTwo?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    status?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListFriendPairsQueryVariables = {
+  filter?: ModelFriendPairFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListFriendPairsQuery = {
+  listFriendPairs?:  {
+    __typename: "ModelFriendPairConnection",
+    items:  Array< {
+      __typename: "FriendPair",
+      id: string,
+      firstUserID: string,
+      secondUserID: string,
+      userOne?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null,
+      userTwo?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        imageUri?: string | null,
+        status?: string | null,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null,
+      status?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2010,15 +2267,10 @@ export type GetChatRoomUserQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2029,6 +2281,7 @@ export type GetChatRoomUserQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -2081,6 +2334,7 @@ export type ListChatRoomUsersQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -2145,6 +2399,7 @@ export type GetChatRoomQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -2215,15 +2470,10 @@ export type GetMessageQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2234,6 +2484,7 @@ export type GetMessageQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -2287,6 +2538,7 @@ export type ListMessagesQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -2317,15 +2569,10 @@ export type GetEventUserQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2336,6 +2583,7 @@ export type GetEventUserQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoom?:  {
       __typename: "EventRoom",
@@ -2391,6 +2639,7 @@ export type ListEventUsersQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoom?:  {
         __typename: "EventRoom",
@@ -2460,6 +2709,7 @@ export type GetEventRoomQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -2536,15 +2786,10 @@ export type GetEventQuery = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2555,6 +2800,7 @@ export type GetEventQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoomID: string,
     eventRoom?:  {
@@ -2614,6 +2860,7 @@ export type ListEventsQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -2656,6 +2903,7 @@ export type MessagesByChatRoomQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -2699,6 +2947,7 @@ export type EventsByEventRoomQuery = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -2721,32 +2970,20 @@ export type OnCreateUserSubscription = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
-    friends?:  Array< {
-      __typename: "User",
-      id: string,
-      name: string,
-      imageUri?: string | null,
-      status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
+    contacts?:  {
+      __typename: "ModelFriendPairConnection",
+      items:  Array< {
+        __typename: "FriendPair",
         id: string,
-        name: string,
-        imageUri?: string | null,
+        firstUserID: string,
+        secondUserID: string,
         status?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
-      chatRoomUser?:  {
-        __typename: "ModelChatRoomUserConnection",
-        nextToken?: string | null,
-      } | null,
-      eventUser?:  {
-        __typename: "ModelEventUserConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -2773,6 +3010,7 @@ export type OnCreateUserSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -2783,32 +3021,20 @@ export type OnUpdateUserSubscription = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
-    friends?:  Array< {
-      __typename: "User",
-      id: string,
-      name: string,
-      imageUri?: string | null,
-      status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
+    contacts?:  {
+      __typename: "ModelFriendPairConnection",
+      items:  Array< {
+        __typename: "FriendPair",
         id: string,
-        name: string,
-        imageUri?: string | null,
+        firstUserID: string,
+        secondUserID: string,
         status?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
-      chatRoomUser?:  {
-        __typename: "ModelChatRoomUserConnection",
-        nextToken?: string | null,
-      } | null,
-      eventUser?:  {
-        __typename: "ModelEventUserConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -2835,6 +3061,7 @@ export type OnUpdateUserSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -2845,32 +3072,20 @@ export type OnDeleteUserSubscription = {
     name: string,
     imageUri?: string | null,
     status?: string | null,
-    friends?:  Array< {
-      __typename: "User",
-      id: string,
-      name: string,
-      imageUri?: string | null,
-      status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
+    contacts?:  {
+      __typename: "ModelFriendPairConnection",
+      items:  Array< {
+        __typename: "FriendPair",
         id: string,
-        name: string,
-        imageUri?: string | null,
+        firstUserID: string,
+        secondUserID: string,
         status?: string | null,
         createdAt: string,
         updatedAt: string,
-      } | null > | null,
-      chatRoomUser?:  {
-        __typename: "ModelChatRoomUserConnection",
-        nextToken?: string | null,
-      } | null,
-      eventUser?:  {
-        __typename: "ModelEventUserConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null > | null,
+        owner?: string | null,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
     chatRoomUser?:  {
       __typename: "ModelChatRoomUserConnection",
       items:  Array< {
@@ -2897,6 +3112,190 @@ export type OnDeleteUserSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnCreateFriendPairSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnCreateFriendPairSubscription = {
+  onCreateFriendPair?:  {
+    __typename: "FriendPair",
+    id: string,
+    firstUserID: string,
+    secondUserID: string,
+    userOne?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    userTwo?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    status?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateFriendPairSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnUpdateFriendPairSubscription = {
+  onUpdateFriendPair?:  {
+    __typename: "FriendPair",
+    id: string,
+    firstUserID: string,
+    secondUserID: string,
+    userOne?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    userTwo?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    status?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteFriendPairSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnDeleteFriendPairSubscription = {
+  onDeleteFriendPair?:  {
+    __typename: "FriendPair",
+    id: string,
+    firstUserID: string,
+    secondUserID: string,
+    userOne?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    userTwo?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      imageUri?: string | null,
+      status?: string | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
+      chatRoomUser?:  {
+        __typename: "ModelChatRoomUserConnection",
+        nextToken?: string | null,
+      } | null,
+      eventUser?:  {
+        __typename: "ModelEventUserConnection",
+        nextToken?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    status?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -2912,15 +3311,10 @@ export type OnCreateChatRoomUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2931,6 +3325,7 @@ export type OnCreateChatRoomUserSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -2973,15 +3368,10 @@ export type OnUpdateChatRoomUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -2992,6 +3382,7 @@ export type OnUpdateChatRoomUserSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -3034,15 +3425,10 @@ export type OnDeleteChatRoomUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3053,6 +3439,7 @@ export type OnDeleteChatRoomUserSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -3128,6 +3515,7 @@ export type OnCreateChatRoomSubscription = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -3188,6 +3576,7 @@ export type OnUpdateChatRoomSubscription = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -3248,6 +3637,7 @@ export type OnDeleteChatRoomSubscription = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       chatRoom?:  {
         __typename: "ChatRoom",
@@ -3277,15 +3667,10 @@ export type OnCreateMessageSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3296,6 +3681,7 @@ export type OnCreateMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -3339,15 +3725,10 @@ export type OnUpdateMessageSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3358,6 +3739,7 @@ export type OnUpdateMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -3401,15 +3783,10 @@ export type OnDeleteMessageSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3420,6 +3797,7 @@ export type OnDeleteMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     chatRoom?:  {
       __typename: "ChatRoom",
@@ -3461,15 +3839,10 @@ export type OnCreateEventUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3480,6 +3853,7 @@ export type OnCreateEventUserSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoom?:  {
       __typename: "EventRoom",
@@ -3525,15 +3899,10 @@ export type OnUpdateEventUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3544,6 +3913,7 @@ export type OnUpdateEventUserSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoom?:  {
       __typename: "EventRoom",
@@ -3589,15 +3959,10 @@ export type OnDeleteEventUserSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3608,6 +3973,7 @@ export type OnDeleteEventUserSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoom?:  {
       __typename: "EventRoom",
@@ -3691,6 +4057,7 @@ export type OnCreateEventRoomSubscription = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -3757,6 +4124,7 @@ export type OnUpdateEventRoomSubscription = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -3823,6 +4191,7 @@ export type OnDeleteEventRoomSubscription = {
         status?: string | null,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       eventRoomID: string,
       eventRoom?:  {
@@ -3855,15 +4224,10 @@ export type OnCreateEventSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3874,6 +4238,7 @@ export type OnCreateEventSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoomID: string,
     eventRoom?:  {
@@ -3923,15 +4288,10 @@ export type OnUpdateEventSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -3942,6 +4302,7 @@ export type OnUpdateEventSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoomID: string,
     eventRoom?:  {
@@ -3991,15 +4352,10 @@ export type OnDeleteEventSubscription = {
       name: string,
       imageUri?: string | null,
       status?: string | null,
-      friends?:  Array< {
-        __typename: "User",
-        id: string,
-        name: string,
-        imageUri?: string | null,
-        status?: string | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null > | null,
+      contacts?:  {
+        __typename: "ModelFriendPairConnection",
+        nextToken?: string | null,
+      } | null,
       chatRoomUser?:  {
         __typename: "ModelChatRoomUserConnection",
         nextToken?: string | null,
@@ -4010,6 +4366,7 @@ export type OnDeleteEventSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     eventRoomID: string,
     eventRoom?:  {

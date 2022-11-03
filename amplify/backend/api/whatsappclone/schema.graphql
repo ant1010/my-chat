@@ -23,25 +23,29 @@
 #   Users:[User] @manyToMany(relationName:"ChatRoomUser")
 # }
 
-type User @model @auth(rules: [{ allow: private }]){
+type User @model @auth(rules: [ { allow: private, operations: [read]},{ allow: owner}]){
   id: ID!
   name: String!
   imageUri: String
   status: String
-  friends:[User]
+  contacts:[FriendPair]@connection(keyName: "byUser", fields: ["id"])
   chatRoomUser: [ChatRoomUser] @connection(keyName: "byUser", fields: ["id"])
   eventUser:[EventUser] @connection(keyName: "byUser", fields: ["id"])
 }
-# type Friends @model @auth(rules: [{ allow: private }]){
-#   id:ID!
-#   friendPair:[User]@connection(keyName: "byFriend", fields: ["id"])
-# }
+type FriendPair @model @auth(rules: [{ allow: owner }])
+@key(name: "byUser", fields: ["firstUserID","secondUserID"]){
+  id:ID!
+  firstUserID:ID!
+  secondUserID:ID!
+  userOne:User @connection(fields:["firstUserID"])
+  userTwo:User @connection(fields:["secondUserID"])
+  status:String
+}
 
 type ChatRoomUser
 @model @auth(rules: [{ allow: private }])
 @key(name: "byUser", fields: ["userID", "chatRoomID"])
 @key(name: "byChatRoom", fields: ["chatRoomID", "userID"])
-
  {
   id: ID!
   userID: ID!

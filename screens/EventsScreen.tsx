@@ -34,7 +34,7 @@ export default function EventsScreen() {
     const fetchChatRooms = async () => {
         try{
             const userInfo = await Auth.currentAuthenticatedUser();
-            
+            console.log(userInfo);
             const userData = await API.graphql(
                 graphqlOperation(
                     getUser, {

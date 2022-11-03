@@ -22,6 +22,7 @@ export type RootStackParamList = {
   Calls:undefined;
   Events:undefined;
   EventCreation:undefined;
+  Status:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -37,6 +38,7 @@ export type RootTabParamList = {
   Camera:undefined;
   Events:undefined;
   EventCreation:undefined;
+
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
@@ -62,6 +64,7 @@ export type User = {
   id:String;
   name:String;
   imageUri: String;
+  status:String;
 }
 export type Message = {
   id:String;
@@ -82,4 +85,6 @@ export type Event = {
   content:String;
   eventTime:String;
   user:User;
+  location:String;
+  invites:User[];
 }

@@ -9,27 +9,17 @@ export const getUser = /* GraphQL */ `
       name
       imageUri
       status
-      friends {
-        id
-        name
-        imageUri
-        status
-        friends {
+      contacts {
+        items {
           id
-          name
-          imageUri
+          firstUserID
+          secondUserID
           status
           createdAt
           updatedAt
+          owner
         }
-        chatRoomUser {
-          nextToken
-        }
-        eventUser {
-          nextToken
-        }
-        createdAt
-        updatedAt
+        nextToken
       }
       chatRoomUser {
         items {
@@ -53,6 +43,7 @@ export const getUser = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -68,13 +59,8 @@ export const listUsers = /* GraphQL */ `
         name
         imageUri
         status
-        friends {
-          id
-          name
-          imageUri
-          status
-          createdAt
-          updatedAt
+        contacts {
+          nextToken
         }
         chatRoomUser {
           nextToken
@@ -84,6 +70,94 @@ export const listUsers = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getFriendPair = /* GraphQL */ `
+  query GetFriendPair($id: ID!) {
+    getFriendPair(id: $id) {
+      id
+      firstUserID
+      secondUserID
+      userOne {
+        id
+        name
+        imageUri
+        status
+        contacts {
+          nextToken
+        }
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      userTwo {
+        id
+        name
+        imageUri
+        status
+        contacts {
+          nextToken
+        }
+        chatRoomUser {
+          nextToken
+        }
+        eventUser {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
+      status
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listFriendPairs = /* GraphQL */ `
+  query ListFriendPairs(
+    $filter: ModelFriendPairFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listFriendPairs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        firstUserID
+        secondUserID
+        userOne {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+          owner
+        }
+        userTwo {
+          id
+          name
+          imageUri
+          status
+          createdAt
+          updatedAt
+          owner
+        }
+        status
+        createdAt
+        updatedAt
+        owner
       }
       nextToken
     }
@@ -100,13 +174,8 @@ export const getChatRoomUser = /* GraphQL */ `
         name
         imageUri
         status
-        friends {
-          id
-          name
-          imageUri
-          status
-          createdAt
-          updatedAt
+        contacts {
+          nextToken
         }
         chatRoomUser {
           nextToken
@@ -116,6 +185,7 @@ export const getChatRoomUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       chatRoom {
         id
@@ -160,6 +230,7 @@ export const listChatRoomUsers = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         chatRoom {
           id
@@ -213,6 +284,7 @@ export const getChatRoom = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         chatRoom {
           id
@@ -271,13 +343,8 @@ export const getMessage = /* GraphQL */ `
         name
         imageUri
         status
-        friends {
-          id
-          name
-          imageUri
-          status
-          createdAt
-          updatedAt
+        contacts {
+          nextToken
         }
         chatRoomUser {
           nextToken
@@ -287,6 +354,7 @@ export const getMessage = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       chatRoom {
         id
@@ -332,6 +400,7 @@ export const listMessages = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         chatRoom {
           id
@@ -356,13 +425,8 @@ export const getEventUser = /* GraphQL */ `
         name
         imageUri
         status
-        friends {
-          id
-          name
-          imageUri
-          status
-          createdAt
-          updatedAt
+        contacts {
+          nextToken
         }
         chatRoomUser {
           nextToken
@@ -372,6 +436,7 @@ export const getEventUser = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       eventRoom {
         id
@@ -419,6 +484,7 @@ export const listEventUsers = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         eventRoom {
           id
@@ -477,6 +543,7 @@ export const getEventRoom = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         eventRoomID
         eventRoom {
@@ -541,13 +608,8 @@ export const getEvent = /* GraphQL */ `
         name
         imageUri
         status
-        friends {
-          id
-          name
-          imageUri
-          status
-          createdAt
-          updatedAt
+        contacts {
+          nextToken
         }
         chatRoomUser {
           nextToken
@@ -557,6 +619,7 @@ export const getEvent = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       eventRoomID
       eventRoom {
@@ -608,6 +671,7 @@ export const listEvents = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         eventRoomID
         eventRoom {
@@ -652,6 +716,7 @@ export const messagesByChatRoom = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         chatRoom {
           id
@@ -697,6 +762,7 @@ export const eventsByEventRoom = /* GraphQL */ `
           status
           createdAt
           updatedAt
+          owner
         }
         eventRoomID
         eventRoom {

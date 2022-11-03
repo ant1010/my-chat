@@ -5,6 +5,28 @@ export const getUser = /* GraphQL */ `
       name
       imageUri
       status
+      contacts {
+      items {
+        firstUserID
+        id
+        secondUserID
+        status
+        updatedAt
+        createdAt
+        userOne {
+          id
+          name
+          imageUri
+          status
+        }
+        userTwo {
+          id
+          imageUri
+          name
+          status
+        }
+      }
+    }
       chatRoomUser {
         items {
           id
