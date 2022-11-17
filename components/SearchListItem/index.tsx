@@ -15,36 +15,36 @@ import {API,graphqlOperation,Auth} from "aws-amplify";
 import {createChatRoom, createChatRoomUser} from "../../src/graphql/mutations"
 import { getUser } from '../../screens/queries';
 
-export type ContactListItemProps = {
+export type SearchListItemProps = {
   user: User;
 }
 
-const ContactListItem = (props: ContactListItemProps) => {
+const SearchListItem = (props: SearchListItemProps) => {
   const { user } = props;
   const [foundChatRoomID,setFoundChatRoomID] = useState([]);
  
-  useEffect (() =>{
-    const findDuplicate = async () => {
-      const userInfo = await API.graphql(graphqlOperation(getUser,{id:user.id}));
-      const currUser = await Auth.currentAuthenticatedUser();
-      const currUserInfo = await API.graphql(graphqlOperation(getUser,{id:currUser.attributes.sub}));
-      const user1 = userInfo.data.getUser.chatRoomUser.items;
-      const user2 = currUserInfo.data.getUser.chatRoomUser.items;
+//   useEffect (() =>{
+//     const findDuplicate = async () => {
+//       const userInfo = await API.graphql(graphqlOperation(getUser,{id:user.id}));
+//       const currUser = await Auth.currentAuthenticatedUser();
+//       const currUserInfo = await API.graphql(graphqlOperation(getUser,{id:currUser.attributes.sub}));
+//       const user1 = userInfo.data.getUser.chatRoomUser.items;
+//       const user2 = currUserInfo.data.getUser.chatRoomUser.items;
       
-      var result = user1.filter(function(o1){
+//       var result = user1.filter(function(o1){
         
-        return user2.some(function(o2){
+//         return user2.some(function(o2){
           
-            return ((o1.chatRoomID === o2.chatRoomID) && (o1.chatRoom.chatRoomUsers.items.length === 2));          
-        }); })
-       if(result[0] != null){
-         setFoundChatRoomID(result[0]);
-        return result;
-       }
-    }
+//             return ((o1.chatRoomID === o2.chatRoomID) && (o1.chatRoom.chatRoomUsers.items.length === 2));          
+//         }); })
+//        if(result[0] != null){
+//          setFoundChatRoomID(result[0]);
+//         return result;
+//        }
+//     }
     
-    findDuplicate();
-  },[])
+//     findDuplicate();
+//   },[])
    
   
   const navigation = useNavigation();
@@ -85,7 +85,7 @@ const ContactListItem = (props: ContactListItemProps) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={onClick}>
+    <TouchableWithoutFeedback >
       <View style={styles.container}>
         <View style={styles.lefContainer}>
           <Image source={{ uri: user.imageUri }} style={styles.avatar}/>
@@ -100,4 +100,4 @@ const ContactListItem = (props: ContactListItemProps) => {
   )
 };
 
-export default ContactListItem;
+export default SearchListItem;

@@ -12,7 +12,7 @@ export default function ContactsScreen() {
         const fetchUsers = async () => {
             try{
               const userInfo = await Auth.currentAuthenticatedUser();
-              console.log(userInfo);
+              
               const userData = await API.graphql(
                   graphqlOperation(
                       getUser, {
@@ -20,7 +20,7 @@ export default function ContactsScreen() {
                       }
                   )
               )
-              console.log(userData);
+           
               setUsers(userData.data.getUser.contacts.items);
             }catch(e){
                 console.log(e);

@@ -3,6 +3,7 @@ import  {Alert,View, ViewBase,Button} from 'react-native'
 import {Octicons} from '@expo/vector-icons';
 // @ts-ignore
 import Auth from '@aws-amplify/auth'
+
 export default function SignOut() {
     function onSignOut(){
         console.log("sign out");

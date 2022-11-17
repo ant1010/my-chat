@@ -21,9 +21,14 @@ import ContactsScreen from '../screens/ContactsScreen';
 import EventsScreen from '../screens/EventsScreen';
 import EventCreation from '../screens/EventCreation';
 import StatusScreen from '../screens/StatusScreen';
+import SearchScreen from '../screens/SearchScreen';
 import { RootStackParamList, MainTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import SignOut from './HeaderIcons/SignOut'
+import SignOut from './HeaderIcons/SignOut';
+import Search from './HeaderIcons/Search';
+import ChatRooms from '../data/ChatRooms';
+import { listChatRoomUsers } from '../src/graphql/queries';
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <NavigationContainer
@@ -62,7 +67,7 @@ function RootNavigator() {
         title:"MyChat",
         headerRight: () => (
           <View style = {{flexDirection: 'row', width: 60,justifyContent: 'space-between', marginRight:10}}>
-          <Octicons name = "search" size = {22} color = {'white'}/>
+          <Search/>
           <MaterialCommunityIcons name = 'dots-vertical' size = {22} color = {'white'}/>
           <SignOut/>
           </View>
@@ -89,6 +94,7 @@ function RootNavigator() {
       <Stack.Screen name="Events" component={EventsScreen} options={{ title: 'Events' }} />
       <Stack.Screen name="EventCreation" component={EventCreation} options={{ title: 'Start a New Event' }} />
       <Stack.Screen name="Status" component={StatusScreen} options={{ title: 'Status' }} />
+      <Stack.Screen name="Search" component={SearchScreen} options={{ title: 'Search' }} />
       
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
 
@@ -139,7 +145,7 @@ function MainTabNavigator() {
       />
       <MainTab.Screen
         name="Chats"
-        component={EventCreation} options={{tabBarLabelStyle:{fontWeight:"bold",fontSize:12}}}
+        component={ChatsScreen} options={{tabBarLabelStyle:{fontWeight:"bold",fontSize:12}}}
         
       />
       <MainTab.Screen

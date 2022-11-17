@@ -23,6 +23,7 @@ export type RootStackParamList = {
   Events:undefined;
   EventCreation:undefined;
   Status:undefined;
+  Search:undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
@@ -34,11 +35,9 @@ export type RootTabParamList = {
   Chats: undefined;
   Connections: undefined;
   Status: undefined;
-  Calls: undefined;
-  Camera:undefined;
   Events:undefined;
   EventCreation:undefined;
-
+  Search:undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<

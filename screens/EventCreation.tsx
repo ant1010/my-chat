@@ -56,14 +56,6 @@ export default function EventsScreen() {
             }
           }));
       } else {
-        
-        // const newEventRoom = await API.graphql(
-        //   graphqlOperation(
-        //     createEventRoom, {
-        //     input: {
-             
-        //     }
-        //   }));
         const newEventRoom = "52d5a32e-98aa-4780-b693-55d9462c2ab4";
         const newEvent = await API.graphql(
           graphqlOperation(
