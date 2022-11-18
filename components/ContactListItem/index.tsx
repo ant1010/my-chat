@@ -22,15 +22,16 @@ export type ContactListItemProps = {
 const ContactListItem = (props: ContactListItemProps) => {
   const { user } = props;
   const [foundChatRoomID,setFoundChatRoomID] = useState([]);
- 
+  const [click,setClick] = useState(false);
   useEffect (() =>{
-    const findDuplicate = async () => {
+      const findDuplicate = async () => {
       const userInfo = await API.graphql(graphqlOperation(getUser,{id:user.id}));
       const currUser = await Auth.currentAuthenticatedUser();
       const currUserInfo = await API.graphql(graphqlOperation(getUser,{id:currUser.attributes.sub}));
       const user1 = userInfo.data.getUser.chatRoomUser.items;
       const user2 = currUserInfo.data.getUser.chatRoomUser.items;
-      
+      console.log(user1);
+      console.log(user2);
       var result = user1.filter(function(o1){
         
         return user2.some(function(o2){
@@ -44,16 +45,17 @@ const ContactListItem = (props: ContactListItemProps) => {
     }
     
     findDuplicate();
-  },[])
+  },[click])
    
   
   const navigation = useNavigation();
 
   const onClick = async() => {
    // navigate to chat room with this user
+   setClick(true);
      try{
        
-       
+       console.log(foundChatRoomID.chatRoomID);
         if(foundChatRoomID.chatRoomID != null){
          
           navigation.navigate('ChatRoom', {
@@ -69,12 +71,12 @@ const ContactListItem = (props: ContactListItemProps) => {
             return;
         }
         const newChatRoom = newChatRoomData.data.createChatRoom;
-        
+         setFoundChatRoomID(newChatRoom.id);
         const room = await API.graphql(graphqlOperation(createChatRoomUser,{input:{userID: user.id,chatRoomID:newChatRoom.id}}));
         
         const userInfo = await Auth.currentAuthenticatedUser();
         await API.graphql(graphqlOperation(createChatRoomUser,{input:{userID: userInfo.attributes.sub,chatRoomID:newChatRoom.id}}));
-        
+       
         navigation.navigate('ChatRoom', {
             id: newChatRoom.id,
             name: "Harcoded name",

@@ -3,6 +3,7 @@ import {FlatList, StyleSheet,View,TextInput,Text} from 'react-native';
 import {listUsers} from './queries';
 import {API,graphqlOperation,Auth} from 'aws-amplify';
 import SearchListItem from '../components/SearchListItem';
+
 export default function SearchScreen() {
     const [query,setQuery] = useState("");
     const [userList,setUserList] = useState([]);

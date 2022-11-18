@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   TouchableWithoutFeedback,
- 
+  TouchableOpacity
 } from "react-native";
 import {useEffect,useState} from 'react';
 import { User } from "../../types";
@@ -12,8 +12,16 @@ import styles from "./styles";
 import moment from "moment";
 import { useNavigation } from '@react-navigation/native';
 import {API,graphqlOperation,Auth} from "aws-amplify";
-import {createChatRoom, createChatRoomUser} from "../../src/graphql/mutations"
+import {createFriendPair,deleteFriendPair} from "../../src/graphql/mutations"
 import { getUser } from '../../screens/queries';
+import {
+    MaterialCommunityIcons,
+    MaterialIcons,
+    FontAwesome,
+    Entypo,
+    Fontisto,
+    EvilIcons,
+} from '@expo/vector-icons';
 
 export type SearchListItemProps = {
   user: User;
@@ -21,80 +29,69 @@ export type SearchListItemProps = {
 
 const SearchListItem = (props: SearchListItemProps) => {
   const { user } = props;
-  const [foundChatRoomID,setFoundChatRoomID] = useState([]);
- 
-//   useEffect (() =>{
-//     const findDuplicate = async () => {
-//       const userInfo = await API.graphql(graphqlOperation(getUser,{id:user.id}));
-//       const currUser = await Auth.currentAuthenticatedUser();
-//       const currUserInfo = await API.graphql(graphqlOperation(getUser,{id:currUser.attributes.sub}));
-//       const user1 = userInfo.data.getUser.chatRoomUser.items;
-//       const user2 = currUserInfo.data.getUser.chatRoomUser.items;
-      
-//       var result = user1.filter(function(o1){
-        
-//         return user2.some(function(o2){
-          
-//             return ((o1.chatRoomID === o2.chatRoomID) && (o1.chatRoom.chatRoomUsers.items.length === 2));          
-//         }); })
-//        if(result[0] != null){
-//          setFoundChatRoomID(result[0]);
-//         return result;
-//        }
-//     }
+  const [foundContact,setFoundContact] = useState(null);
+  const [checkMark,setCheckMark] = useState(false);
+  const [currUser,setCurrUser] = useState();
+  useEffect (() =>{
+    const searchContactList = async () => {
+     try{
+      const currUser = await Auth.currentAuthenticatedUser();
+      const currentUser = await API.graphql(graphqlOperation(getUser,{id: currUser.attributes.sub}));
+      setCurrUser(currUser);
+      console.log(currentUser.data.getUser.contacts.items);
+      const found = currentUser.data.getUser.contacts.items.filter(item => item.secondUserID == user.id)
+      setFoundContact(found);
+      if(found.length >= 1){return setCheckMark(true)}
+     }catch(e){
+        console.log(e);
+     }
+    }
     
-//     findDuplicate();
-//   },[])
+    searchContactList();
+  },[])
    
   
   const navigation = useNavigation();
+  const addToContacts = async() =>{
+      console.log("add",user.name)
+      try{
+     if(checkMark){
+         //remove contact
+         const deletedFriendPair = await API.graphql(graphqlOperation(deleteFriendPair,{input:{id: foundContact[0].id}}));
+         console.log("remove contact from list",foundContact[0].id);
+     }else{
+         //add contact
+        const newFriendPair = await API.graphql(graphqlOperation(createFriendPair,{input: {firstUserID: currUser.attributes.sub, secondUserID: user.id}}));
+        console.log("added to contacts",newFriendPair);
 
-  const onClick = async() => {
-   // navigate to chat room with this user
-     try{
-       
-       
-        if(foundChatRoomID.chatRoomID != null){
-         
-          navigation.navigate('ChatRoom', {
-            id: foundChatRoomID.chatRoomID,
-            name: foundChatRoomID.chatRoom.chatRoomUsers.items[1].user.name,
-          })
 
-          return;
-        }
-        const newChatRoomData = await API.graphql(graphqlOperation(createChatRoom,{input:{}}))
-        if(!newChatRoomData.data){
-            console.log("Failed to create a chat room");
-            return;
-        }
-        const newChatRoom = newChatRoomData.data.createChatRoom;
-        
-        const room = await API.graphql(graphqlOperation(createChatRoomUser,{input:{userID: user.id,chatRoomID:newChatRoom.id}}));
-        
-        const userInfo = await Auth.currentAuthenticatedUser();
-        await API.graphql(graphqlOperation(createChatRoomUser,{input:{userID: userInfo.attributes.sub,chatRoomID:newChatRoom.id}}));
-        
-        navigation.navigate('ChatRoom', {
-            id: newChatRoom.id,
-            name: "Harcoded name",
-          })
-     }catch(e){
-         console.log(e);
      }
+      setCheckMark(!checkMark);
+    }catch(e){
+        console.log(e);
+    }
   }
+
 
   return (
     <TouchableWithoutFeedback >
       <View style={styles.container}>
         <View style={styles.lefContainer}>
           <Image source={{ uri: user.imageUri }} style={styles.avatar}/>
-
+         
           <View style={styles.midContainer}>
             <Text style={styles.username}>{user.name}</Text>
             {/*<Text numberOfLines={2} style={styles.status}>{user.status}</Text>*/}
           </View>
-        </View>
+         </View>
+         
+              <View  style={{ justifyContent: 'space-around',width:"20%",alignItems: 'stretch' }}>
+              <TouchableOpacity onPress = {addToContacts} >
+              {checkMark?<MaterialCommunityIcons name="account-check-outline" size={24} color="grey" />:<MaterialIcons name="person-add-alt-1" size={24} color="grey" />}
+                   </TouchableOpacity>
+              </View>
+           
+        
       </View>
     </TouchableWithoutFeedback>
   )

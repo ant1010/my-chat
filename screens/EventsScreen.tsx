@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {RefreshControl, SafeAreaView,Text, ScrollView,FlatList, StyleSheet} from 'react-native';
 import { View } from '../components/Themed';
 import EventListItem from '../components/EventListItem';
 import {listEvents} from '../src/graphql/queries';
@@ -13,6 +13,11 @@ import {
   Auth,
 
 }from 'aws-amplify';
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 export default function EventsScreen() {
     // const [events,setEvents] = useState([]);
     // useEffect(() => {
@@ -29,8 +34,13 @@ export default function EventsScreen() {
     // }, [])
     const [eventRooms,setEventRooms] = useState([]);
     const [key, setKey] = useState(false);
+    const [refreshing, setRefreshing] = React.useState(false);
 
-
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
+  
     const fetchChatRooms = async () => {
         try{
             const userInfo = await Auth.currentAuthenticatedUser();
@@ -58,27 +68,40 @@ export default function EventsScreen() {
          
     fetchChatRooms();
     
-; }, [])
+; }, [refreshing])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.scrollview}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+    >
       <FlatList
         style={{width: '100%'}}
         data={eventRooms}
         renderItem={({ item }) => <EventListItem  event={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.eventTime}
       
       />
       <NewEventButton/>
-    </View>
+      </ScrollView>
+    </SafeAreaView >
 
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollview: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  container:{
+    flex:1,
+  }
 });

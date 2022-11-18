@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: 'space-between',
     padding: 10,
-    margin:5,
     backgroundColor:'black',
     borderRadius:4,
     borderWidth:2,

@@ -32,7 +32,7 @@ const ContactListItem = (props: ContactListItemProps) => {
    // navigate to chat room with this user
      try{
        console.log("status click");
-       
+       console.log(user);
         
      }catch(e){
          console.log(e);
@@ -48,7 +48,7 @@ const ContactListItem = (props: ContactListItemProps) => {
           <View style={styles.midContainer}>
             <Text style={styles.username}>{user.name}</Text>
             <Text style={styles.status}>{user.status}</Text>
-            {/*<Text numberOfLines={2} style={styles.status}>{user.status}</Text>*/}
+            {/* <Text  style={styles.status}>{user.updatedAt}</Text> */}
           </View>
         </View>
       </View>
