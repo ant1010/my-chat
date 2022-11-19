@@ -3,13 +3,13 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import { FontAwesome,Fontisto,MaterialIcons,Feather } from '@expo/vector-icons';
+import { FontAwesome,FontAwesome5,Ionicons,Fontisto,MaterialIcons,Feather } from '@expo/vector-icons';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
 import { ColorSchemeName,View } from 'react-native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { BottomNavigation, Text } from 'react-native-paper';
 import {Octicons,MaterialCommunityIcons} from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -109,53 +109,40 @@ function RootNavigator() {
  * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-const MainTab = createMaterialTopTabNavigator<MainTabParamList>();
+const MainTab = createMaterialBottomTabNavigator<MainTabParamList>();
 
 function MainTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
     <MainTab.Navigator
-      initialRouteName="Chats"
-      screenOptions={{
-        tabBarShowIcon:false,
-        tabBarActiveTintColor:Colors["dark"].text,
-        
-        tabBarStyle:{
-          backgroundColor: Colors["dark"].tint,
-        },
-        
-        tabBarIndicatorStyle:{
-          backgroundColor:Colors["dark"].tabIconSelected,
-          height:4,
-        },
-        tabBarLabelStyle:{
-          fontWeight:'bold',
-        }
-      }}>
+        initialRouteName="Chats"
+       
+      >
       <MainTab.Screen
         name="Connections"
         component={ContactsScreen}
         options={{
           
-          //tabBarIcon:({color})=><Fontisto name="camera" color={color} />,
+          tabBarIcon:({color})=><FontAwesome5 name="user-friends" size={21} color="white" />,
          // tabBarLabel:()=>null,
           
         }}
       />
       <MainTab.Screen
         name="Chats"
-        component={ChatsScreen} options={{tabBarLabelStyle:{fontWeight:"bold",fontSize:12}}}
+        
+        component={ChatsScreen} options={{ tabBarIcon:({color})=><Ionicons name="ios-chatbubbles-sharp" size={24} color="white" />,}}
         
       />
       <MainTab.Screen
         name="Events"
-        component={EventsScreen} options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
+        component={EventsScreen} options={{ tabBarIcon:({color})=><MaterialIcons name="event" size={24} color="white" />,}}
         
       />
       <MainTab.Screen
         name="Status"
-        component={StatusScreen}options={{tabBarLabelStyle:{fontWeight:'bold',fontSize:12}}}
+        component={StatusScreen}options={{ tabBarIcon:({color})=><MaterialCommunityIcons name="comment-quote" size={24} color="white" />,}}
         
       />
     </MainTab.Navigator>

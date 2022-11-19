@@ -6,7 +6,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import {getUser} from './src/graphql/queries';
 import {createUser} from './src/graphql/mutations';
-
+import { Provider as PaperProvider } from 'react-native-paper';
 
 // @ts-ignore
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -72,10 +72,12 @@ useEffect(() => {
     return null;
   } else {
     return (
+      <PaperProvider>
       <SafeAreaProvider>
         <Navigation colorScheme={"dark"} />
         <StatusBar />
       </SafeAreaProvider>
+      </PaperProvider>
     );
   }
 }

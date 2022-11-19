@@ -3,7 +3,8 @@ import {
   View,
   Text,
   Image,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Animated
 } from "react-native";
 import { ChatRoom } from "../../types";
 import styles from "./style";
@@ -16,7 +17,7 @@ import {
 
 }from 'aws-amplify';
 import {useEffect,useState} from 'react';
-
+import {Swipeable,TouchableOpacity} from 'react-native-gesture-handler';
 
 export type ChatListItemProps = {
   chatRoom: ChatRoom;
@@ -56,9 +57,34 @@ const ChatListItem = (props: ChatListItemProps) => {
   if(!otherUser){
     return null;
   }
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation,
+    dragX: Animated.AnimatedInterpolation,
+  ) => {
+    const opacity = dragX.interpolate({
+      inputRange: [-150, 0],
+      outputRange: [1, 0],
+      extrapolate: 'clamp',
+    });
   
+    return (
+      <View style={styles.swipedRow}>
+        <View style={styles.swipedConfirmationContainer}>
+          <Text style={styles.deleteConfirmationText}>Are you sure?</Text>
+        </View>
+        <Animated.View style={[styles.deleteButton, {opacity}]}>
+          <TouchableOpacity>
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+    );
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={onClick}>
+    
+    
+     <Swipeable renderRightActions={renderRightActions}>
       <View style={styles.container}>
         <View style={styles.lefContainer}>
        
@@ -75,7 +101,8 @@ const ChatListItem = (props: ChatListItemProps) => {
           {chatRoom.lastMessage && moment(chatRoom.lastMessage.createdAt).format("DD/MM/YYYY")}
         </Text>
       </View>
-    </TouchableWithoutFeedback>
+      </Swipeable>
+    
   )
 };
 
